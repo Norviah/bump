@@ -49,7 +49,8 @@
   "dependencies": {
     "@oclif/core": "^2.8.7",
     "@oclif/plugin-help": "^5.2.9",
-    "tsc-alias": "^1.8.6"
+    "tsc-alias": "^1.8.6",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@oclif/test": "^2.3.22",
