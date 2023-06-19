@@ -1,6 +1,7 @@
-import { Args, Command, Flags } from '@oclif/core';
+import { Command } from '@/structs/Command';
+import { Args, Flags } from '@oclif/core';
 
-export default class Hello extends Command {
+export default class Hello extends Command<typeof Hello> {
   public static description = 'Say hello';
 
   public static examples = [
@@ -25,8 +26,6 @@ hello friend from oclif! (./src/commands/hello/index.ts)
   };
 
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Hello);
-
-    this.log(`hello ${args.person} from ${flags.from}! (./src/commands/hello/index.ts)`);
+    this.log(`hello ${this.args.person} from ${this.flags.from}! (./src/commands/hello/index.ts)`);
   }
 }
