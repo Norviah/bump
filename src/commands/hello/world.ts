@@ -1,6 +1,6 @@
-import { Command } from '@oclif/core';
+import { Command } from '@/structs/Command';
 
-export default class World extends Command {
+export default class World extends Command<typeof World> {
   public static description = 'Say hello world';
 
   public static examples = [
@@ -8,10 +8,6 @@ export default class World extends Command {
 hello world! (./src/commands/hello/world.ts)
 `,
   ];
-
-  public static flags = {};
-
-  public static args = {};
 
   public async run(): Promise<void> {
     this.log('hello world! (./src/commands/hello/world.ts)');

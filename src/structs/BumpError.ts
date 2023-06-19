@@ -1,11 +1,67 @@
+import { fromZodError } from 'zod-validation-error';
+
+import type { SpawnSyncReturns } from 'child_process';
+import type { ZodError } from 'zod';
+
 export enum ErrorCodes {
+  /**
+   * The event where a JSON file was not found.
+   */
+  MISSING_JSON_FILE = 'MISSING_JSON_FILE',
+
+  /**
+   * The event where a non-JSON file was provided.
+   */
+  NON_JSON_FILE = 'NON_JSON_FILE',
+
   /**
    * The event where an invalid JSON file was provided.
    */
   INVALID_JSON = 'INVALID_JSON',
+
+  /**
+   * The event where a shell script failed to execute.
+   */
+  SCRIPT_ERROR = 'SCRIPT_ERROR',
+
+  /**
+   * The event where the configuration file is invalid.
+   */
+  INVALID_CONFIG = 'INVALID_CONFIG',
+
+  /**
+   * The event where the git command is not installed.
+   */
+  GIT_NOT_INSTALLED = 'GIT_NOT_INSTALLED',
+
+  /**
+   * The event where the command-line tool is called from outside of a git
+   * repository.
+   */
+  NOT_A_GIT_REPOSITORY = 'NOT_A_GIT_REPOSITORY',
 }
 
 const Messages = {
+  /**
+   * Generates the error message for the `MISSING_JSON_FILE` error code.
+   *
+   * @param path The path to the JSON file.
+   * @returns The generated error message.
+   */
+  MISSING_JSON_FILE: (path: string): string => {
+    return `the JSON file at \`${path}\` does not exist.`;
+  },
+
+  /**
+   * Generates the error message for the `NON_JSON_FILE` error code.
+   *
+   * @param path The path to the JSON file.
+   * @returns The generated error message.
+   */
+  NON_JSON_FILE: (path: string): string => {
+    return `the path \`${path}\` is not a JSON file.`;
+  },
+
   /**
    * Generates the error message for the `INVALID_JSON` error code.
    *
@@ -14,6 +70,44 @@ const Messages = {
    */
   INVALID_JSON: (path: string): string => {
     return `the JSON file at \`${path}\` is invalid.`;
+  },
+
+  /**
+   * Generates the error message for the `SCRIPT_ERROR` error code.
+   *
+   * @param info Information regarding the thrown spawn error.
+   * @returns The generated error message.
+   */
+  SCRIPT_ERROR: (error: SpawnSyncReturns<string>): string => {
+    return error.stderr || error.stdout || error.error?.message || 'an unknown error occurred.';
+  },
+
+  /**
+   * Generates the error message for the `INVALID_CONFIG` error code.
+   *
+   * @param error The error thrown by Zod.
+   * @returns The generated error message.
+   */
+  INVALID_CONFIG: (error: ZodError): string => {
+    return `the configuration file is invalid: ${fromZodError(error).message.split(': ')[1]}`;
+  },
+
+  /**
+   * Generates the error message for the `GIT_NOT_INSTALLED` error code.
+   *
+   * @returns The generated error message.
+   */
+  GIT_NOT_INSTALLED: (): string => {
+    return 'git is not installed.';
+  },
+
+  /**
+   * Generates the error message for the `NOT_A_GIT_REPOSITORY` error code.
+   *
+   * @returns The generated error message.
+   */
+  NOT_A_GIT_REPOSITORY: (): string => {
+    return 'this command must be run from inside a git repository.';
   },
 };
 
@@ -42,7 +136,9 @@ export class BumpError<T extends keyof typeof ErrorCodes> extends Error {
    * @param args Any arguments to pass to the error code.
    */
   public constructor(code: T, ...args: Parameters<(typeof Messages)[T]>) {
-    super(Messages[code](args as any) as string);
+    const message: string = (Messages[code] as (...args: any[]) => string)(...(args as any[])) as string;
+
+    super(message);
 
     this.code = code;
     this.args = args;
