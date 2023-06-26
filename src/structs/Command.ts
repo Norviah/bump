@@ -1,6 +1,9 @@
+import chalk from 'chalk';
+
 import { Command as BaseCommand, Flags, Interfaces } from '@oclif/core';
 import { Context } from './Context';
 
+import type { LoggingOptions } from '@/types/LoggingOptions';
 import type { Config as CommandConfig } from '@oclif/core';
 
 export type Flags<T extends typeof BaseCommand> = Interfaces.InferredFlags<(typeof Command)['baseFlags'] & T['flags']>;
@@ -43,6 +46,62 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
    */
   public constructor(argv: string[], config: CommandConfig) {
     super(argv, config);
+  }
+
+  /**
+   * Logs a message to the console.
+   *
+   * @param message The message to log.
+   * @param options The options to use when logging the message.
+   */
+  public log(message: string, options?: LoggingOptions): void {
+    super.log(
+      `${options?.title ? `${chalk[options?.colors?.title ?? 'white'](options.title)} ` : ''}${chalk[options?.colors?.message ?? 'white'](message)}`
+    );
+  }
+
+  /**
+   * Executed if an error is thrown during the command's execution.
+   *
+   * When oclif is executing the command's `run` method, if an error is thrown,
+   * the command handler will execute this method with the thrown error. We'll
+   * simply log the error and exit the process.
+   * @params error The error that was thrown.
+   */
+  public async catch(error: Error): Promise<never> {
+    this.log(error.message, { title: 'error', colors: { title: 'red' } });
+    process.exit(1);
+  }
+
+  /**
+   * A helper method to print a success.
+   *
+   * @param message The message to log.
+   * @param options Options for logging.
+   */
+  public success(message: string, options?: Partial<LoggingOptions>): void {
+    this.log(message, { title: 'ok', ...options, colors: { title: 'green', ...options?.colors } });
+  }
+
+  /**
+   * A helper method to print a warning.
+   *
+   * The title is set to `warning` with the color set to `yellow`.
+   * @param message The message to log.
+   * @param options Options for logging.
+   */
+  public warning(message: string, options?: Partial<LoggingOptions>): void {
+    this.log(message, { title: 'warning', ...options, colors: { title: 'yellow', ...options?.colors } });
+  }
+
+  /**
+   * A helper method to print information.
+   *
+   * @param message The message to log.
+   * @param options Options for logging.
+   */
+  public info(message: string, options?: Partial<LoggingOptions>): void {
+    this.log(message, { title: 'info', ...options, colors: { title: 'blue', ...options?.colors } });
   }
 
   /**
