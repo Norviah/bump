@@ -4,7 +4,8 @@
     "files": true
   },
   "compilerOptions": {
-    "declaration": true,
+    "declaration": false,
+    "removeComments": true,
     "importHelpers": true,
     "module": "commonjs",
     "outDir": "dist",
