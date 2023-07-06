@@ -39,6 +39,16 @@ export enum ErrorCodes {
    * repository.
    */
   NOT_A_GIT_REPOSITORY = 'NOT_A_GIT_REPOSITORY',
+
+  /**
+   * The event where the user attempts to save an output file to a directory.
+   */
+  INVALID_OUTPUT_PATH = 'INVALID_OUTPUT_PATH',
+
+  /**
+   * The event where the directory to save the output file to does not exist.
+   */
+  MISSING_DIRECTORY = 'MISSING_DIRECTORY',
 }
 
 const Messages = {
@@ -109,6 +119,25 @@ const Messages = {
   NOT_A_GIT_REPOSITORY: (): string => {
     return 'this command must be run from inside a git repository.';
   },
+
+  /**
+   * Generates the error message for the `INVALID_OUTPUT_FILE` error code.
+   *
+   * @returns The generated error message.
+   */
+  INVALID_OUTPUT_PATH: (): string => {
+    return 'the output file cannot be saved to a directory.';
+  },
+
+  /**
+   * Generates the error message for the `MISSING_DIRECTORY` error code.
+   *
+   * @param path The path to the directory.
+   * @returns The generated error message.
+   */
+  MISSING_DIRECTORY: (path: string): string => {
+    return `the directory at \`${path}\` does not exist.`;
+  },
 };
 
 export class BumpError<T extends keyof typeof ErrorCodes> extends Error {
@@ -176,5 +205,9 @@ export class BumpError<T extends keyof typeof ErrorCodes> extends Error {
    */
   public is<T extends ErrorCodes>(code: T): this is BumpError<T> {
     return (this.code as keyof typeof ErrorCodes) === code;
+  }
+
+  public static Is<T extends ErrorCodes>(error: Error, code: T): error is BumpError<T> {
+    return error instanceof BumpError && error.is(code);
   }
 }
