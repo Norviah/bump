@@ -10,15 +10,6 @@ export const CommitType = z.object({
   type: z.string(),
 
   /**
-   * The respective scope to match.
-   *
-   * This string should also match the same `scope` string defined in the
-   * respective commit message, it can be used to further specify which commit
-   * type to reference.
-   */
-  scope: z.string().optional(),
-
-  /**
    * Whether if matched commits should not be included within the changelog.
    */
   hidden: z.boolean().default(false),

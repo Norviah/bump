@@ -30,6 +30,31 @@ export const Object = z.object({
    * An array of explicit commit types to support.
    */
   types: z.array(CommitType).optional(),
+
+  /**
+   * The header to use for unreleased commits.
+   *
+   * When generating a changelog, the tool will group commits into sections
+   * as represented by the release the commit is included in. Naturally, there
+   * will be commits that are not yet released, this options allows you to
+   * specify the title to use for that specific section.
+   */
+  unreleasedHeader: z.string().default('Unreleased'),
+
+  /**
+   * Whether to include a commit's body when generating the line for a commit.
+   *
+   * Sometimes, a commit's body can further specify the commit's intent and
+   * purpose. If desired, the commit's body will be included under the
+   * commit's subject when generating the changelog.
+   */
+  includeBody: z.boolean().default(false),
+
+  /**
+   * Whether to include non-conventional commits when generating the
+   * changelog.
+   */
+  includeNonConventionalCommits: z.boolean().default(true),
 });
 
 export type Object = z.infer<typeof Object>;
