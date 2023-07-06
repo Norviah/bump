@@ -1,0 +1,47 @@
+{
+  "tasks": {
+    "pre": [],
+    "post": []
+  },
+  "types": [
+    {
+      "type": "feat",
+      "name": "Features"
+    },
+    {
+      "type": "fix",
+      "name": "Bug Fixes"
+    },
+    {
+      "type": "chore",
+      "hidden": true
+    },
+    {
+      "type": "docs",
+      "hidden": true
+    },
+    {
+      "type": "revert",
+      "name": "Reverted"
+    },
+    {
+      "type": "refactor",
+      "name": "Refactor"
+    },
+    {
+      "type": "build",
+      "name": "Build System"
+    },
+    {
+      "type": "init",
+      "name": "Init"
+    },
+    {
+      "type": "remove",
+      "name": "Removed Features"
+    }
+  ],
+  "unreleasedHeader": "Unreleased",
+  "includeNonConventionalCommits": true,
+  "includeBody": true
+}
