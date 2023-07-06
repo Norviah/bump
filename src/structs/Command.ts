@@ -1,10 +1,16 @@
 import chalk from 'chalk';
 
+import { Object as Config } from '@/schemas/config';
+import { git } from '@/util/git';
+import { read } from '@/util/read';
 import { Command as BaseCommand, Flags, Interfaces } from '@oclif/core';
-import { Context } from './Context';
+import { BumpError, ErrorCodes } from './BumpError';
 
+import type { CommandContext } from '@/types/CommandContex';
 import type { LoggingOptions } from '@/types/LoggingOptions';
 import type { Config as CommandConfig } from '@oclif/core';
+import type { JsonObject, ReadonlyDeep } from 'type-fest';
+import type { ZodError } from 'zod-validation-error';
 
 export type Flags<T extends typeof BaseCommand> = Interfaces.InferredFlags<(typeof Command)['baseFlags'] & T['flags']>;
 export type Args<T extends typeof BaseCommand> = Interfaces.InferredArgs<T['args']>;
@@ -13,20 +19,21 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
   /**
    * Parsed flags from the command-line.
    */
-  protected flags!: Flags<T>;
+  public flags!: Flags<T>;
 
   /**
    * Parsed arguments from the command-line.
    */
-  protected args!: Args<T>;
+  public args!: Args<T>;
 
   /**
    * Provides important information regarding the command-line tool.
    *
-   * `context` references a `Context` instance, which is used to provide
-   * important information regarding the command-line tool.
+   * The `context` property is available to all commands, which provides
+   * important information regarding the context of the command's execution,
+   * such as a reference to the configuration file or paths.
    */
-  protected context!: Context;
+  public context!: ReadonlyDeep<CommandContext>;
 
   /**
    * The base flags for commands.
@@ -68,9 +75,8 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
    * simply log the error and exit the process.
    * @params error The error that was thrown.
    */
-  public async catch(error: Error): Promise<never> {
+  public async catch(error: Error): Promise<void> {
     this.log(error.message, { title: 'error', colors: { title: 'red' } });
-    process.exit(1);
   }
 
   /**
@@ -86,7 +92,6 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
   /**
    * A helper method to print a warning.
    *
-   * The title is set to `warning` with the color set to `yellow`.
    * @param message The message to log.
    * @param options Options for logging.
    */
@@ -121,9 +126,51 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
     this.args = args as Args<T>;
 
     try {
-      this.context = new Context({ config: this.flags.config });
+      this.context = await Command.InitializeContext(flags.config);
     } catch (error) {
       this.error((error as Error).message, { exit: 1 });
     }
+  }
+
+  /**
+   * Imports a configuration object from the specified path.
+   *
+   * @param path The path to the configuration file.
+   * @returns An instance of `Config` using the values from the specified path.
+   * @throws A `BumpError` instance with the code `INVALID_CONFIG` if the schema
+   * validation fails.
+   */
+  private static ImportConfig(path: string): Config {
+    const object: JsonObject = read(path);
+
+    try {
+      return Config.parse(object);
+    } catch (error) {
+      throw new BumpError(ErrorCodes.INVALID_CONFIG, error as ZodError);
+    }
+  }
+
+  /**
+   * Initializes a new `CommandContext` instance.
+   *
+   * `CommandContext` represents important information regarding the context of
+   * where the command-line tool is being executed.
+   * @param configPath An optional path to use when importing the configuration
+   * object. If not specified, the default configuration path will be used.
+   * @returns A new `CommandContext` instance.
+   */
+  public static async InitializeContext(configPath?: string): Promise<CommandContext> {
+    let root: string;
+
+    // If the command was executed within a git repository, we'll set the root
+    // directory to reflect the root directory of the git repository. Otherwise,
+    // we'll set the root directory to the current working directory.
+    if (await git.checkIsRepo()) {
+      root = await git.revparse(['--show-toplevel']);
+    } else {
+      root = process.cwd();
+    }
+
+    return { config: Command.ImportConfig(configPath ?? `${root}/.bumprc.json`), rootPath: root };
   }
 }
