@@ -5,6 +5,16 @@ import type { ZodError } from 'zod';
 
 export enum ErrorCodes {
   /**
+   * The event where a text file was not found.
+   */
+  MISSING_TEXT_FILE = 'MISSING_TEXT_FILE',
+
+  /**
+   * The event where a non-text file was provided.
+   */
+  NON_TEXT_FILE = 'NON_TEXT_FILE',
+
+  /**
    * The event where a JSON file was not found.
    */
   MISSING_JSON_FILE = 'MISSING_JSON_FILE',
@@ -49,9 +59,35 @@ export enum ErrorCodes {
    * The event where the directory to save the output file to does not exist.
    */
   MISSING_DIRECTORY = 'MISSING_DIRECTORY',
+
+  /**
+   * The event where the user passes an invalid argument from a predefined set
+   * of options.
+   */
+  INVALID_ARG_OPTION = 'INVALID_ARG_OPTION',
 }
 
 const Messages = {
+  /**
+   * Generates the error message for the `MISSING_TEXT_FILE` error code.
+   *
+   * @param path The path to the text file.
+   * @returns The generated error message.
+   */
+  MISSING_TEXT_FILE: (path: string): string => {
+    return `the text file at \`${path}\` does not exist.`;
+  },
+
+  /**
+   * Generates the error message for the `NON_TEXT_FILE` error code.
+   *
+   * @param path The path to the text file.
+   * @returns The generated error message.
+   */
+  NON_TEXT_FILE: (path: string): string => {
+    return `the path \`${path}\` is not a text file.`;
+  },
+
   /**
    * Generates the error message for the `MISSING_JSON_FILE` error code.
    *
@@ -137,6 +173,17 @@ const Messages = {
    */
   MISSING_DIRECTORY: (path: string): string => {
     return `the directory at \`${path}\` does not exist.`;
+  },
+
+  /**
+   * Generates the error message for the `INVALID_ARG_OPTION` error code.
+   *
+   * @param option The invalid option.
+   * @param options The valid options.
+   * @returns The generated error message.
+   */
+  INVALID_ARG_OPTION: (option: string, options: string[]): string => {
+    return `the argument \`${option}\` is invalid, expected one of: ${options.map((option) => `\`${option}\``).join(', ')}.`;
   },
 };
 

@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 
 import { Object as Config } from '@/schemas/config';
+import { Read } from '@/structs/Read';
 import { git } from '@/util/git';
-import { read } from '@/util/read';
 import { Command as BaseCommand, Flags, Interfaces } from '@oclif/core';
 import { BumpError, ErrorCodes } from './BumpError';
 
@@ -141,7 +141,7 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
    * validation fails.
    */
   private static ImportConfig(path: string): Config {
-    const object: JsonObject = read(path);
+    const object: JsonObject = Read.JSON(path);
 
     try {
       return Config.parse(object);
