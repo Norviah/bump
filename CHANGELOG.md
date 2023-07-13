@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Refactor
+
+- implement a class to provide methods for reading from files <code>[c2a9c49](https://github.com/Norviah/bump/commit/c2a9c49868be8190747f4627d839679f5bb38ce4)</code>
+
 ### Features
 
 - implement a subcommand for generating changelogs <code>[fee72fb](https://github.com/Norviah/bump/commit/fee72fb50dc02ff40c7465370bcae95880ee6f21)</code>
