@@ -1,10 +1,8 @@
 ## Unreleased
 
-### Refactor
-
-- implement a class to provide methods for reading from files <code>[48b68fd](https://github.com/norviah/bump/commit/48b68fdd452fc7b32442fd9c06cc5a7e8d72cbc6)</code>
-
 ### Features
+
+- implement an option to specify a root directory when running a shell script <code>[a175aa7](https://github.com/norviah/bump/commit/a175aa708fcd3e99cee05df790b877073ee23982)</code>
 
 - implement a subcommand for generating changelogs <code>[fee72fb](https://github.com/norviah/bump/commit/fee72fb50dc02ff40c7465370bcae95880ee6f21)</code>
 
@@ -19,6 +17,10 @@
 - define schemas for the configuration object <code>[d137f88](https://github.com/norviah/bump/commit/d137f884086f15a0c5adeeb4ace1207bff5ab4b4)</code>
 
 - **deps**: add the dependency `simple-git` for working with git <code>[37ed211](https://github.com/norviah/bump/commit/37ed211f5d3aa5e51fd285188b2ede5543526c60)</code>
+
+### Refactor
+
+- implement a class to provide methods for reading from files <code>[48b68fd](https://github.com/norviah/bump/commit/48b68fdd452fc7b32442fd9c06cc5a7e8d72cbc6)</code>
 
 ### Init
 
