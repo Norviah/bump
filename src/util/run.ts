@@ -16,6 +16,6 @@ export function run(command: string, options?: { root?: string }): string {
   try {
     return execSync(script, { encoding: 'utf-8' }).toString().trim();
   } catch (error) {
-    throw new BumpError(ErrorCodes.SCRIPT_ERROR, error as SpawnSyncReturns<string>);
+    throw new BumpError(ErrorCodes.SCRIPT_ERROR, error as SpawnSyncReturns<string> & Error);
   }
 }
