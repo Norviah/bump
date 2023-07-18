@@ -124,8 +124,8 @@ const Messages = {
    * @param info Information regarding the thrown spawn error.
    * @returns The generated error message.
    */
-  SCRIPT_ERROR: (error: SpawnSyncReturns<string>): string => {
-    return error.stderr || error.stdout || error.error?.message || 'an unknown error occurred.';
+  SCRIPT_ERROR: (error: SpawnSyncReturns<string> & Error): string => {
+    return error.stderr || error.stdout || error.error?.message || error.message || 'an unknown error occurred.';
   },
 
   /**
@@ -254,7 +254,7 @@ export class BumpError<T extends keyof typeof ErrorCodes> extends Error {
     return (this.code as keyof typeof ErrorCodes) === code;
   }
 
-  public static Is<T extends ErrorCodes>(error: Error, code: T): error is BumpError<T> {
+  public static Is<T extends ErrorCodes>(error: unknown, code: T): error is BumpError<T> {
     return error instanceof BumpError && error.is(code);
   }
 }
