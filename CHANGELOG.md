@@ -6,6 +6,8 @@
 
 - implement a class to provide methods for reading from files <code>[48b68fd](https://github.com/norviah/bump/commit/48b68fdd452fc7b32442fd9c06cc5a7e8d72cbc6)</code>
 
+- **`Command`**: move the logic for importing the config file to `InitializeContext` <code>[4c6decb](https://github.com/norviah/bump/commit/4c6decb6ccd15fce36e2b38ac6cc826348f522f3)</code>
+
 ### Bug Fixes
 
 - correctly infer the message from a script error <code>[0ebca62](https://github.com/norviah/bump/commit/0ebca62577770709ff3b14a47a0f21fff8e56dd8)</code>
