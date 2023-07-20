@@ -1,10 +1,8 @@
-import chalk from 'chalk';
-
-import { Object as Config } from '@/schemas/config';
+import { BumpError, ErrorCodes } from '@/structs/BumpError';
+import { Logger } from '@/structs/Logger';
 import { Read } from '@/structs/Read';
 import { git } from '@/util/git';
 import { Command as BaseCommand, Flags, Interfaces } from '@oclif/core';
-import { BumpError, ErrorCodes } from './BumpError';
 
 import type { CommandContext } from '@/types/CommandContex';
 import type { LoggingOptions } from '@/types/LoggingOptions';
@@ -64,9 +62,7 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
    * @param options The options to use when logging the message.
    */
   public log(message: string, options?: LoggingOptions): void {
-    super.log(
-      `${options?.title ? `${chalk[options?.colors?.title ?? 'white'](options.title)} ` : ''}${chalk[options?.colors?.message ?? 'white'](message)}`
-    );
+    super.log(Logger.Generate(message, options));
   }
 
   /**
