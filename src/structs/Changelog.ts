@@ -1,6 +1,8 @@
+import { BumpError, ErrorCodes } from '@/structs/BumpError';
 import { git } from '@/util/git';
 import { match } from '@/util/match';
-import { BumpError, ErrorCodes } from './BumpError';
+import { existsSync, statSync, writeFileSync } from 'fs';
+import { dirname } from 'path';
 
 import * as schemas from '@/schemas';
 import * as regex from '@/util/regex';
@@ -396,7 +398,7 @@ export abstract class Changelog {
    * @throws A `BumpError` with the `NOT_A_GIT_REPOSITORY` error code if the
    * current working directory is not a git repository.
    */
-  public static async Generate(config: ReadonlyDeep<Config>): Promise<string> {
+  public static async GenerateString(config: ReadonlyDeep<Config>): Promise<string> {
     if (!(await git.checkIsRepo())) {
       throw new BumpError(ErrorCodes.NOT_A_GIT_REPOSITORY);
     }
@@ -447,5 +449,24 @@ export abstract class Changelog {
     }
 
     return sections.join('\n');
+  }
+
+  /**
+   * Generates a markdown-formatted changelog and saves it to the specified
+   * output file.
+   *
+   * This method acts as the entry point for the `Generate` method, which will
+   * generate the changelog and save it to the specified file.
+   * @param config The configuration object containing configuration values for
+   * altering how the changelog is generated.
+   */
+  public static async Save(config: ReadonlyDeep<Config> & { output: string }): Promise<void> {
+    if (existsSync(config.output) && !statSync(config.output).isFile()) {
+      throw new BumpError(ErrorCodes.INVALID_OUTPUT_PATH);
+    } else if (!existsSync(dirname(config.output))) {
+      throw new BumpError(ErrorCodes.MISSING_DIRECTORY, dirname(config.output));
+    }
+
+    writeFileSync(config.output, await Changelog.GenerateString(config));
   }
 }

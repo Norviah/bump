@@ -1,11 +1,12 @@
 import { BumpError, ErrorCodes } from '@/structs/BumpError';
 import { Changelog } from '@/structs/Changelog';
 import { Command } from '@/structs/Command';
+import { Logger } from '@/structs/Logger';
 import { git } from '@/util/git';
-import { Flags } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
+import { icons } from '@/util/icons';
 
-import { existsSync, statSync, writeFileSync } from 'fs';
-import { dirname, join, resolve } from 'path';
+import { join, resolve } from 'path';
 
 /**
  * The `changelog generate` subcommand.
@@ -96,20 +97,19 @@ export default class Generate extends Command<typeof Generate> {
     // the changelog is instead saved to the project's root directory.
     const output: string = resolve(this.flags.output ?? join(this.context.rootPath, 'CHANGELOG.md'));
 
-    // If the user has provided a path through the `output` option, we'll ensure
-    // that if the path exists, it is a file.
-    if (this.flags.output && existsSync(output) && !statSync(output).isFile()) {
-      throw new BumpError(ErrorCodes.INVALID_OUTPUT_PATH);
-    } else if (!existsSync(dirname(output))) {
-      throw new BumpError(ErrorCodes.MISSING_DIRECTORY, dirname(output));
-    }
+    ux.action.start(Logger.Generate('generating changelog', { title: 'bump' }));
 
     try {
-      writeFileSync(output, await Changelog.Generate(this.context.config));
-    } catch (e) {
-      this.error((e as Error).message);
+      await Changelog.Save({ ...this.context.config, output });
+    } catch (error) {
+      // If an error occurs during the generation of the changelog, we'll want
+      // to first stop the spinner, then throw the error - which will be caught
+      // by the command's error handler.
+      ux.action.stop(icons.X);
+
+      throw error;
     }
 
-    this.success(`successfully generated changelog to \`${output}\`.`);
+    ux.action.stop(icons.CHECKMARK);
   }
 }
