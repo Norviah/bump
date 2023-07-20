@@ -12,6 +12,8 @@ import type { Config as CommandConfig } from '@oclif/core';
 import type { JsonObject, ReadonlyDeep } from 'type-fest';
 import type { ZodError } from 'zod-validation-error';
 
+import * as schemas from '@/schemas';
+
 export type Flags<T extends typeof BaseCommand> = Interfaces.InferredFlags<(typeof Command)['baseFlags'] & T['flags']>;
 export type Args<T extends typeof BaseCommand> = Interfaces.InferredArgs<T['args']>;
 
@@ -126,40 +128,20 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
     this.args = args as Args<T>;
 
     try {
-      this.context = await Command.InitializeContext(flags.config);
+      this.context = await Command.InitializeContext({ config: flags.config });
     } catch (error) {
       this.error((error as Error).message, { exit: 1 });
     }
   }
 
   /**
-   * Imports a configuration object from the specified path.
-   *
-   * @param path The path to the configuration file.
-   * @returns An instance of `Config` using the values from the specified path.
-   * @throws A `BumpError` instance with the code `INVALID_CONFIG` if the schema
-   * validation fails.
-   */
-  private static ImportConfig(path: string): Config {
-    const object: JsonObject = Read.JSON(path);
-
-    try {
-      return Config.parse(object);
-    } catch (error) {
-      throw new BumpError(ErrorCodes.INVALID_CONFIG, error as ZodError);
-    }
-  }
-
-  /**
    * Initializes a new `CommandContext` instance.
    *
-   * `CommandContext` represents important information regarding the context of
-   * where the command-line tool is being executed.
-   * @param configPath An optional path to use when importing the configuration
-   * object. If not specified, the default configuration path will be used.
+   * @param paths An optional object containing explicit paths to use when
+   * initializing aspects of the command context.
    * @returns A new `CommandContext` instance.
    */
-  public static async InitializeContext(configPath?: string): Promise<CommandContext> {
+  public static async InitializeContext(paths?: { config?: string }): Promise<CommandContext> {
     let root: string;
 
     // If the command was executed within a git repository, we'll set the root
@@ -171,6 +153,14 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
       root = process.cwd();
     }
 
-    return { config: Command.ImportConfig(configPath ?? `${root}/.bumprc.json`), rootPath: root };
+    // Once the root directory has been determined, we'll import the
+    // configuration object from the specified path.
+    const json: JsonObject = Read.JSON(paths?.config ?? `${root}/.bumprc.json`);
+
+    try {
+      return { config: schemas.config.Object.parse(json), rootPath: root };
+    } catch (error) {
+      throw new BumpError(ErrorCodes.INVALID_CONFIG, error as ZodError);
+    }
   }
 }
