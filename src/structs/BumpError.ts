@@ -1,7 +1,7 @@
 import { fromZodError } from 'zod-validation-error';
 
-import type { SpawnSyncReturns } from 'child_process';
 import type { ZodError } from 'zod';
+import type { ExecaError } from 'execa';
 
 export enum ErrorCodes {
   /**
@@ -124,8 +124,12 @@ const Messages = {
    * @param info Information regarding the thrown spawn error.
    * @returns The generated error message.
    */
-  SCRIPT_ERROR: (error: SpawnSyncReturns<string> & Error): string => {
-    return error.stderr || error.stdout || error.error?.message || error.message || 'an unknown error occurred.';
+  SCRIPT_ERROR: (error: ExecaError): string => {
+    if (error?.stderr.length > 0 || error?.stdout.length > 0) {
+      return `${error.stdout.trim()}\n\n${error.stderr.trim()}`.trim();
+    }
+
+    return error.message || 'an unknown error occurred.';
   },
 
   /**
