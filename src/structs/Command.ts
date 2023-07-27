@@ -2,7 +2,7 @@ import { BumpError, ErrorCodes } from '@/structs/BumpError';
 import { Logger } from '@/structs/Logger';
 import { Read } from '@/structs/Read';
 import { git } from '@/util/git';
-import { Command as BaseCommand, Flags, Interfaces } from '@oclif/core';
+import { Command as BaseCommand, Flags, Interfaces, ux } from '@oclif/core';
 
 import type { CommandContext } from '@/types/CommandContex';
 import type { LoggingOptions } from '@/types/LoggingOptions';
@@ -105,6 +105,16 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
    */
   public info(message: string, options?: Partial<LoggingOptions>): void {
     this.log(message, { title: 'info', ...options, colors: { title: 'blue', ...options?.colors } });
+  }
+
+  /**
+   * Prompts the user for input.
+   *
+   * @param question The question to ask the user.
+   * @returns The user's input.
+   */
+  public async prompt(message: string, options?: Partial<LoggingOptions>): Promise<string> {
+    return await ux.prompt(Logger.Generate(message, { title: 'bump', ...options }));
   }
 
   /**
