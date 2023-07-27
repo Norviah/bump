@@ -18,6 +18,8 @@
 
 - define schemas for the configuration object <code>[d137f88](https://github.com/norviah/bump/commit/d137f884086f15a0c5adeeb4ace1207bff5ab4b4)</code>
 
+- **`Command`**: implement a utility method for asking the user for input <code>[95b1dbb](https://github.com/norviah/bump/commit/95b1dbb11659497c87be8b17db1156033d0b2737)</code>
+
 - **deps**: add the dependency `execa` for running shell commands <code>[10948b7](https://github.com/norviah/bump/commit/10948b7c7ca63244fff8a528d1d9f44ca8fde9e6)</code>
 
 - **deps**: add the dependency `simple-git` for working with git <code>[37ed211](https://github.com/norviah/bump/commit/37ed211f5d3aa5e51fd285188b2ede5543526c60)</code>
