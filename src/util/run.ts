@@ -8,8 +8,6 @@ import type { ExecaError } from 'execa';
  *
  * @param command The command to execute.
  * @param options Options for the script execution.
- * @param timeout Timeout in milliseconds after which the command will be
- * terminated.
  * @returns The output of the command.
  */
 export async function run(command: string, options?: { root?: string; timeout: number }): Promise<string> {
