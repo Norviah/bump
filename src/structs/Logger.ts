@@ -23,7 +23,7 @@ export abstract class Logger {
       ...options?.colors,
     };
 
-    return `${options?.title ? `${chalk[colors.title](options.title)} ` : ''}${chalk[colors.message](message)}`;
+    return `${`${chalk[colors.title](options?.title ?? 'bump')} `}${chalk[colors.message](message)}`;
   }
 
   /**
