@@ -74,7 +74,7 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
    * @params error The error that was thrown.
    */
   public async catch(error: Error): Promise<void> {
-    this.log(error.message, { title: 'error', colors: { title: 'red' } });
+    this.log(error.message.trim(), { title: 'error', colors: { title: 'red' } });
   }
 
   /**
