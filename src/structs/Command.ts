@@ -4,7 +4,7 @@ import { Read } from '@/structs/Read';
 import { git } from '@/util/git';
 import { Command as BaseCommand, Flags, Interfaces, ux } from '@oclif/core';
 
-import type { CommandContext } from '@/types/CommandContex';
+import type { CommandContext } from '@/types/CommandContext';
 import type { LoggingOptions } from '@/types/LoggingOptions';
 import type { Config as CommandConfig } from '@oclif/core';
 import type { JsonObject, ReadonlyDeep } from 'type-fest';

@@ -16,7 +16,7 @@ import type { Release as ReleaseSchema, SemVer as SemVerSchema } from '@/schemas
 import type { Provider as ProviderSchema, Task as TaskSchema } from '@/schemas/config';
 import type { BumpError, ErrorCodes } from '@/structs/BumpError';
 import type { Options } from '@/structs/Command';
-import type { CommandContext } from '@/types/CommandContex';
+import type { CommandContext } from '@/types/CommandContext';
 import type { ReadonlyDeep } from 'type-fest';
 
 type Substitutions = { tag: string; subject: string; changelog: string };
