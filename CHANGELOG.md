@@ -20,6 +20,8 @@
 
 - define schemas for the configuration object <code>[d137f88](https://github.com/norviah/bump/commit/d137f884086f15a0c5adeeb4ace1207bff5ab4b4)</code>
 
+- **`Changelog`**: don't print commits representing a merge <code>[80e8f13](https://github.com/norviah/bump/commit/80e8f13dc7d698104f36fb07bfddc00717613585)</code>
+
 - **`Changelog`**: additionally print commits that introduce breaking changes into their own section <code>[b0840d7](https://github.com/norviah/bump/commit/b0840d71522c26ef92cf97712bacede596f1d3e6)</code>
 
 - **`Command`**: implement a utility method for asking the user for input <code>[95b1dbb](https://github.com/norviah/bump/commit/95b1dbb11659497c87be8b17db1156033d0b2737)</code>
@@ -52,4 +54,4 @@
 
 - implement oclif template <code>[52408a6](https://github.com/norviah/bump/commit/52408a665516a9d3901c33db7d2be50aedbadf2d)</code>
 
-- initial commit <code>[b61d1d0](https://github.com/norviah/bump/commit/b61d1d0c41d6e24973b40755dffa25f823a2fa65)</code>
+- initial commit <code>[b61d1d0 ò](https://github.com/norviah/bump/commit/b61d1d0c41d6e24973b40755dffa25f823a2fa65)</code>
