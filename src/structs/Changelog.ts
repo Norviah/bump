@@ -402,14 +402,8 @@ export abstract class Changelog {
    * @param config The configuration object containing configuration values for
    * altering how the changelog is generated.
    * @returns A markdown-formatted string representing the generated changelog.
-   * @throws A `BumpError` with the `NOT_A_GIT_REPOSITORY` error code if the
-   * current working directory is not a git repository.
    */
   public static async GenerateString(config: ReadonlyDeep<Config>): Promise<string> {
-    if (!(await git.checkIsRepo())) {
-      throw new BumpError(ErrorCodes.NOT_A_GIT_REPOSITORY);
-    }
-
     // By using the `simple-git` library, it makes it trivial to retrieve all
     // commits within the repository. We're able to import all commits and
     // format each commit to our liking.
