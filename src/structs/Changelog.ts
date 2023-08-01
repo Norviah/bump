@@ -307,6 +307,9 @@ export abstract class Changelog {
     // with their commits and options as specified by the configuration object.
     const groups = Changelog.GroupLogsWithType(current.commits);
 
+    // If the current release has a body, we'll want to include it within the
+    // section as it may contain important information regarding the intent and
+    // purpose of the release.
     if (current.body && current.body.length > 0) {
       lines.push(`- ${current.body}`);
     }
