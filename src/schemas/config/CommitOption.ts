@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const CommitType = z.object({
+export const CommitOption = z.object({
   /**
    * The commit's respective type.
    *
@@ -24,4 +24,4 @@ export const CommitType = z.object({
   name: z.string().optional(),
 });
 
-export type CommitType = z.infer<typeof CommitType>;
+export type CommitOption = z.infer<typeof CommitOption>;
