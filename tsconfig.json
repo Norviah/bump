@@ -13,6 +13,7 @@
     "strict": true,
     "target": "es2019",
     "baseUrl": ".",
+    "moduleDetection": "force",
     "paths": {
       "@/*": ["src/*"]
     }
