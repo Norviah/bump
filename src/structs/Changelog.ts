@@ -314,6 +314,22 @@ export abstract class Changelog {
       lines.push(`- ${current.body}`);
     }
 
+    // Before we generate the body of the section, we'll want to check if there
+    // are any commits that introduce a breaking change. These commits will be
+    // printed as normal, however, they'll also be grouped under a separate
+    // section specifically for breaking changes.
+    const breaking = current.commits.filter((l) => {
+      return typeof l.message === 'object' && l.message.breaking;
+    });
+
+    if (breaking.length > 0) {
+      lines.push(`### ${config.breakingHeader}\n`);
+
+      for (const log of breaking) {
+        lines.push(`${Changelog.LogToString(log, url, config)}\n`);
+      }
+    }
+
     // When generating the body of the section, we'll first want to print any
     // commits that are not in a conventional format, as these commits can't be
     // grouped under a type.
@@ -449,7 +465,7 @@ export abstract class Changelog {
       sections.push(await Changelog.GenerateSection({ current: releases[versions[i]], previous: releases[versions[i + 1]] }, config));
     }
 
-    return sections.join('\n');
+    return sections.join('\n').trim();
   }
 
   /**
