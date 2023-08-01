@@ -14,6 +14,7 @@ import * as schemas from '@/schemas';
 
 export type Flags<T extends typeof BaseCommand> = Interfaces.InferredFlags<(typeof Command)['baseFlags'] & T['flags']>;
 export type Args<T extends typeof BaseCommand> = Interfaces.InferredArgs<T['args']>;
+export type Options<T extends typeof BaseCommand> = Flags<T> & Args<T>;
 
 export abstract class Command<T extends typeof BaseCommand> extends BaseCommand {
   /**
