@@ -81,6 +81,19 @@ export const Object = z.object({
   unreleasedHeader: z.string().default('Unreleased'),
 
   /**
+   * The string to use for the section in the changelog that contains breaking
+   * changes.
+   *
+   * Within a release, there may be commits that introduce breaking changes,
+   * these commits are printed under their type as normal, in addition to being
+   * printed under a section representing breaking changes.
+   *
+   * This option allows the user to specify the header to use for that specific
+   * section.
+   */
+  breakingHeader: z.string().default('⚠ Breaking Changes'),
+
+  /**
    * Whether to include a commit's body when generating the changelog.
    *
    * A commit's body may contain additional information regarding the commit's
