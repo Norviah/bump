@@ -20,7 +20,7 @@
 
 - define schemas for the configuration object <code>[d137f88](https://github.com/norviah/bump/commit/d137f884086f15a0c5adeeb4ace1207bff5ab4b4)</code>
 
-- **`Changelog`**: don't print commits representing a merge <code>[80e8f13](https://github.com/norviah/bump/commit/80e8f13dc7d698104f36fb07bfddc00717613585)</code>
+- **`Changelog`**: don't print commits representing merges <code>[7650b1f](https://github.com/norviah/bump/commit/7650b1fb728fec7dae4d6d7d106c063fae7bc977)</code>
 
 - **`Changelog`**: additionally print commits that introduce breaking changes into their own section <code>[b0840d7](https://github.com/norviah/bump/commit/b0840d71522c26ef92cf97712bacede596f1d3e6)</code>
 
