@@ -9,7 +9,7 @@ import * as schemas from '@/schemas';
 
 import type { Provider as ProviderSchema } from '@/schemas/config';
 import type { BaseProvider } from '@/structs/providers';
-import type { CommandContext } from '@/types/CommandContex';
+import type { CommandContext } from '@/types/CommandContext';
 import type { Arg } from '@oclif/core/lib/interfaces/parser';
 import type { ReadonlyDeep } from 'type-fest';
 
