@@ -14,6 +14,7 @@ import type * as regex from '@/util/regex';
 export type BaseLog = DefaultLogFields &
   ListLogLine & {
     short_hash: string;
+    merge: string;
   };
 
 /**

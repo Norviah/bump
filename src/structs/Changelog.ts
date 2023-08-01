@@ -298,6 +298,13 @@ export abstract class Changelog {
       lines.push(`## ${current.version} (${current.date})\n`);
     }
 
+    // When generating the section, we don't want to include any merge commits
+    // as it represents redundant information. Therefore, we'll filter out any
+    // merge commits from the current release.
+    current.commits = current.commits.filter((log) => {
+      return !(log.merge.split(' ').length === 2);
+    });
+
     // After the header, we'll generate the body of the section, which will
     // consist of the commits associated with the release. When generating the
     // respective commits, we'll want to group them under their respective types
@@ -436,6 +443,7 @@ export abstract class Changelog {
         author_name: '%aN',
         author_email: '%aE',
         short_hash: '%h',
+        merge: '%P',
       },
 
       '--date': 'short',
