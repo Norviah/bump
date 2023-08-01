@@ -20,6 +20,8 @@
 
 - define schemas for the configuration object <code>[d137f88](https://github.com/norviah/bump/commit/d137f884086f15a0c5adeeb4ace1207bff5ab4b4)</code>
 
+- **`Changelog`**: additionally print commits that introduce breaking changes into their own section <code>[c62b644](https://github.com/norviah/bump/commit/c62b644a5be1a695ead6cc439e1b6f21d33b6e0d)</code>
+
 - **`Command`**: implement a utility method for asking the user for input <code>[95b1dbb](https://github.com/norviah/bump/commit/95b1dbb11659497c87be8b17db1156033d0b2737)</code>
 
 - **`structs/Changelog`**: include the release's body if available <code>[4190506](https://github.com/norviah/bump/commit/41905064ed8e219b0956db4beb8d42432d167ea6)</code>
@@ -31,6 +33,8 @@
 - **types**: implement a type to infer arguments and flags of a command <code>[1e74c5d](https://github.com/norviah/bump/commit/1e74c5d6b56418ba5f2e1dd0face5f55a02c5ce4)</code>
 
 ### Refactor
+
+- ensure the user is in a git repository <code>[1a2d85e](https://github.com/norviah/bump/commit/1a2d85ef887397fc0530bb666f6754a89109b7fd)</code>
 
 - move the validation logic for saving changelogs into the  structure <code>[0ebf261](https://github.com/norviah/bump/commit/0ebf26188bb8688341c3686a9435293389783e24)</code>
 
