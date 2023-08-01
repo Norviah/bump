@@ -1,10 +1,8 @@
-import { BumpError, ErrorCodes } from '@/structs/BumpError';
 import { Changelog } from '@/structs/Changelog';
 import { Command } from '@/structs/Command';
 import { Logger } from '@/structs/Logger';
-import { git } from '@/util/git';
-import { Flags, ux } from '@oclif/core';
 import { icons } from '@/util/icons';
+import { Flags, ux } from '@oclif/core';
 
 import { join, resolve } from 'path';
 
@@ -12,11 +10,10 @@ import { join, resolve } from 'path';
  * The `changelog generate` subcommand.
  *
  * This subcommand is responsible for generating a changelog based off of the
- * commits in the git repository where the command was executed, thus, this
- * command can only be executed within a git repository.
+ * commits in the git repository where the command was executed. Every commit
+ * within the repository is read and parsed, and a changelog is generated based
+ * on these commits.
  *
- * This subcommand will read every commit within the repository and generate a
- * changelog based on these commits.
  * @example
  * ```sh
  * $ bump changelog generate
@@ -52,21 +49,6 @@ export default class Generate extends Command<typeof Generate> {
   public static flags = {
     output: Flags.string({ char: 'o', description: 'The desired output for the changelog.', required: false }),
   };
-
-  /**
-   * Initializes the command and relevant properties.
-   *
-   * As this command requires to be executed within a git repository, we'll
-   * override the `init` method to ensure this by checking if the `Context`
-   * object has a reference to a git repository.
-   */
-  public async init(): Promise<void> {
-    await super.init();
-
-    if (!(await git.checkIsRepo())) {
-      throw new BumpError(ErrorCodes.NOT_A_GIT_REPOSITORY);
-    }
-  }
 
   /**
    * The command's execution logic.

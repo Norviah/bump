@@ -124,6 +124,13 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
   public async init(): Promise<void> {
     await super.init();
 
+    // This command must be executed within a git repository, so we'll check if
+    // the current working directory is a git repository. If it isn't, we'll
+    // throw an error.
+    if (!(await git.checkIsRepo())) {
+      throw new BumpError(ErrorCodes.NOT_A_GIT_REPOSITORY);
+    }
+
     const { args, flags } = await this.parse({
       flags: this.ctor.flags,
       baseFlags: (super.ctor as typeof Command).baseFlags,
@@ -149,16 +156,9 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
    * @returns A new `CommandContext` instance.
    */
   public static async InitializeContext(paths?: { config?: string }): Promise<CommandContext> {
-    let root: string;
-
-    // If the command was executed within a git repository, we'll set the root
-    // directory to reflect the root directory of the git repository. Otherwise,
-    // we'll set the root directory to the current working directory.
-    if (await git.checkIsRepo()) {
-      root = await git.revparse(['--show-toplevel']);
-    } else {
-      root = process.cwd();
-    }
+    // As we're working in a git repository, the root directory will be the
+    // top-level directory of the git repository.
+    const root: string = await git.revparse(['--show-toplevel']);
 
     // Once the root directory has been determined, we'll import the
     // configuration object from the specified path.
