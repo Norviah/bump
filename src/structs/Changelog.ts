@@ -307,6 +307,10 @@ export abstract class Changelog {
     // with their commits and options as specified by the configuration object.
     const groups = Changelog.GroupLogsWithType(current.commits);
 
+    if (current.body && current.body.length > 0) {
+      lines.push(`- ${current.body}`);
+    }
+
     // When generating the body of the section, we'll first want to print any
     // commits that are not in a conventional format, as these commits can't be
     // grouped under a type.
