@@ -10,9 +10,17 @@ export const Task = z.object({
   name: z.string(),
 
   /**
-   * The bash command to run.
+   * The bash script to run.
    */
   command: z.string(),
+
+  /**
+   * How long (in milliseconds) to wait before terminating the command.
+   *
+   * If a task takes longer than this amount of time to run, an error will be
+   * thrown and the release process will be aborted.
+   */
+  timeout: z.number().default(15000),
 });
 
 export type Task = z.infer<typeof Task>;

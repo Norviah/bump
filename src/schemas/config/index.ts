@@ -1,62 +1,151 @@
 import { z } from 'zod';
+
+import { CommitOption } from './CommitOption';
+import { Provider } from './Provider';
 import { Task } from './Task';
-import { CommitType } from './CommitType';
 
 export const Object = z.object({
   /**
-   * Represents a task to run within a specific step of the release process.
+   * Represents the various phases within the bump process, and the tasks to run
+   * within each phase.
    *
-   * `bump` is a command-line tool that simplifies the process of releasing
-   * software, the tool separates the process of what to do before and after the
-   * version is incremented.
+   * The bump process is divided into three phases:
    *
-   * Within these steps, you can specify a list of tasks to run, these tasks
-   * represent what bash command to run, which will be executed in the root of
-   * the project.
+   *   1. Pre-bump - the phase before the version is incremented,
+   *   2. Bump - where the version is incremented,
+   *   3. Post-bump - the phase after the version is incremented.
+   *
+   * Within these phases, the user can specify a list of scripts to run, which
+   * are bash commands that are executed in the root of the project.
    */
   tasks: z.object({
     /**
      * The list of tasks to run before the version is incremented.
      */
-    pre: z.array(Task),
+    pre: z.array(Task).default([]),
 
     /**
      * The list of tasks to run after the version is incremented.
      */
-    post: z.array(Task),
+    post: z.array(Task).default([]),
   }),
 
   /**
-   * An array of explicit commit types to support.
+   * The method used to access the project's version number.
+   *
+   * Providers are methods of retrieving the version number from a specific type
+   * of file, such as a JSON or text file. Each provider has a respective
+   * structure that implements the logic for retrieving and updating the version
+   * number.
+   *
+   * Through this provider, the command-line tool can retrieve and update the
+   * version number.
    */
-  types: z.array(CommitType).optional(),
+  provider: Provider,
 
   /**
-   * The header to use for unreleased commits.
+   * Options to reference for commits when generating a changelog.
    *
-   * When generating a changelog, the tool will group commits into sections
-   * as represented by the release the commit is included in. Naturally, there
-   * will be commits that are not yet released, this options allows you to
-   * specify the title to use for that specific section.
+   * When generating a changelog, the command-line tool will group commits under
+   * a release into sections determined the commit's type -- assuming the commit
+   * follows the conventional commit format.
+   *
+   * If desired, the user can specify options for various types of commits,
+   * which determines how the list of commits under that type are displayed
+   * within the changelog.
+   */
+  types: z.array(CommitOption).optional(),
+
+  /**
+   * Whether to prompt the user for confirmation before releasing a new version.
+   *
+   * This option is useful as a safety net to prevent accidental releases, if
+   * enabled, the `release` command will prompt the user to confirm before
+   * continuing with the release.
+   *
+   * This option only applies to the `release` command, and if desired, the user
+   * can specify the `--force` flag to bypass this prompt.
+   */
+  prompt: z.boolean().default(false),
+
+  /**
+   * The string to use for the unreleased section within the changelog.
+   *
+   * When generating a changelog, the command-line tool will group commits into
+   * sections determined by the release the commit is under. With each section,
+   * the header of the section is determined by the release's tag.
+   *
+   * Naturally, there may be commits not yet released, this option allows the
+   * user to specify the header to use for that specific section.
    */
   unreleasedHeader: z.string().default('Unreleased'),
 
   /**
-   * Whether to include a commit's body when generating the line for a commit.
+   * Whether to include a commit's body when generating the changelog.
    *
-   * Sometimes, a commit's body can further specify the commit's intent and
-   * purpose. If desired, the commit's body will be included under the
-   * commit's subject when generating the changelog.
+   * A commit's body may contain additional information regarding the commit's
+   * intent and purpose, if desired, this option can be enabled to include the
+   * commit's body when generating the changelog.
    */
   includeBody: z.boolean().default(false),
 
   /**
    * Whether to include non-conventional commits when generating the
    * changelog.
+   *
+   * This command-line tool assumes that commits follow the conventional commit
+   * format, which it uses aspects of the commit to implement its functionality.
+   *
+   * An example being the commit's type, the command-line tool uses the commit's
+   * type to determine which sub-section to group commits under when generating
+   * the changelog.
+   *
+   * Commit subjects that do not follow this format are instead grouped under
+   * the section, not under a subheader. If desired, this option can be enabled
+   * to remove non-conventional commits from the changelog altogether.
    */
   includeNonConventionalCommits: z.boolean().default(true),
+
+  /**
+   * The string to use when creating a tag for a release.
+   *
+   * When creating a tag for a release, the command-line tool will use this
+   * string as the tag's name.
+   *
+   * The following placeholders are available for use:
+   *   - `{{before}}`: the version before the release,
+   *   - `{{after}}`: the version after the release.
+   */
+  tag: z.string().default('v{{after}}'),
+
+  /**
+   * The message to use when creating a release commit.
+   *
+   * The following placeholders are available for use:
+   * - `{{before}}`: the version before the release,
+   * - `{{after}}`: the version after the release,
+   * - `{{tag}}`: the actual tag used for the release.
+   */
+  releaseSubject: z.string().default('chore(release): {{tag}}'),
+
+  /**
+   * The subject for the commit when generating a changelog after a release.
+   *
+   * The following placeholders are available for use:
+   * - `{{before}}`: the version before the release,
+   * - `{{after}}`: the version after the release,
+   * - `{{tag}}`: the actual tag used for the release.
+   */
+  changelogSubject: z.string().default('docs(changelog): {{tag}}'),
 });
 
-export type Object = z.infer<typeof Object>;
+/**
+ * The type of the `Object` schema.
+ *
+ * @template P The specific provider to extract.
+ */
+export type Object<P extends Provider['type'] = Provider['type']> = {
+  [K in keyof z.infer<typeof Object>]: K extends 'provider' ? Extract<Provider, { type: P }> : z.infer<typeof Object>[K];
+};
 
-export { Task, CommitType };
+export { CommitOption, Provider, Task };
