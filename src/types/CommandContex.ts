@@ -1,4 +1,4 @@
-import type { Object as Config } from '@/schemas/config';
+import type { Object as ConfigSchema, Provider as ProviderSchema } from '@/schemas/config';
 
 /**
  * Represents the context of a command's execution.
@@ -11,7 +11,7 @@ import type { Object as Config } from '@/schemas/config';
  * and important paths, such as the root path of the project the command was
  * executed in.
  */
-export interface CommandContext {
+export interface CommandContext<T extends ProviderSchema['type'] = ProviderSchema['type']> {
   /**
    * The command-line tool's configuration object.
    *
@@ -22,7 +22,7 @@ export interface CommandContext {
    * This property will reference that configuration file after it has been
    * parsed and validated.
    */
-  config: Config;
+  config: ConfigSchema<T>;
 
   /**
    * The root path of the project where the command-line tool was executed.

@@ -65,6 +65,12 @@ export enum ErrorCodes {
    * of options.
    */
   INVALID_ARG_OPTION = 'INVALID_ARG_OPTION',
+
+  /**
+   * The event where the user is working with a dirty git repository, when they
+   * want to work with a clean one.
+   */
+  DIRTY_REPO = 'DIRTY_REPO',
 }
 
 const Messages = {
@@ -188,6 +194,15 @@ const Messages = {
    */
   INVALID_ARG_OPTION: (option: string, options: string[]): string => {
     return `the argument \`${option}\` is invalid, expected one of: ${options.map((option) => `\`${option}\``).join(', ')}.`;
+  },
+
+  /**
+   * Generates the error message for the `DIRTY_REPO` error code.
+   *
+   * @returns The generated error message.
+   */
+  DIRTY_REPO: (): string => {
+    return 'the git repository is dirty.';
   },
 };
 
