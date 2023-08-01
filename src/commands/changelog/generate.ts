@@ -39,6 +39,7 @@ export default class Generate extends Command<typeof Generate> {
    *
    * A more detailed description regarding the command and its purpose. This
    * property should describe the command in more detail than the `summary`
+   * property.
    */
   public static description: string = '';
 
