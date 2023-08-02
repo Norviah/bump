@@ -1,7 +1,7 @@
 {
   "name": "bump",
   "version": "0.0.0",
-  "description": "simplify the process of releasing projects",
+  "description": "Simplify the release process of your projects",
   "author": "norviah",
   "bin": {
     "bump": "./bin/run"
