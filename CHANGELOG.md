@@ -2,6 +2,8 @@
 
 ### Features
 
+- implement a command to create a configuration file <code>[2888c5d](https://github.com/norviah/bump/commit/2888c5d00a426ed0238f7c57fa705b8c78c8d810)</code>
+
 - implement a command to release a new project version <code>[3f924c4](https://github.com/norviah/bump/commit/3f924c42e7167ea02e490315b28619b49127da80)</code>
 
 - implement a structure for generating logs <code>[8e2b1bb](https://github.com/norviah/bump/commit/8e2b1bb2796f436e8c6fff14f2f03a650ba8a464)</code>
@@ -42,6 +44,8 @@
 
 - implement a class to provide methods for reading from files <code>[48b68fd](https://github.com/norviah/bump/commit/48b68fdd452fc7b32442fd9c06cc5a7e8d72cbc6)</code>
 
+- **`Command`**: refactor the logic for initializing a command's context to a method that only imports the config file <code>[9cec404](https://github.com/norviah/bump/commit/9cec404c95ee83320fbfd52f8adb87c36de5a787)</code>
+
 - **`Command`**: trim the error's message when catching and displaying a runtime error <code>[7861bae](https://github.com/norviah/bump/commit/7861baea2cc2c022ad269b4873652cd132df1428)</code>
 
 - **`Command`**: move the logic for importing the config file to `InitializeContext` <code>[4c6decb](https://github.com/norviah/bump/commit/4c6decb6ccd15fce36e2b38ac6cc826348f522f3)</code>
@@ -54,4 +58,4 @@
 
 - implement oclif template <code>[52408a6](https://github.com/norviah/bump/commit/52408a665516a9d3901c33db7d2be50aedbadf2d)</code>
 
-- initial commit <code>[b61d1d0 ò](https://github.com/norviah/bump/commit/b61d1d0c41d6e24973b40755dffa25f823a2fa65)</code>
+- initial commit <code>[b61d1d0](https://github.com/norviah/bump/commit/b61d1d0c41d6e24973b40755dffa25f823a2fa65)</code>
