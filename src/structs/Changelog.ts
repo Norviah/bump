@@ -449,6 +449,7 @@ export abstract class Changelog {
         merge: '%P',
       },
 
+      splitter: 'ƻ',
       '--date': 'short',
     });
 
