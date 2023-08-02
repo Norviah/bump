@@ -1,5 +1,5 @@
 {
-  "name": "bump",
+  "name": "@norviah/bump",
   "version": "0.0.0",
   "description": "Simplify the release process of your projects",
   "author": "norviah",
