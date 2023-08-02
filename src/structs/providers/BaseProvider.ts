@@ -13,10 +13,9 @@ import { isAbsolute, resolve } from 'path';
 import type ReleaseCommand from '@/commands/release';
 
 import type { Release as ReleaseSchema, SemVer as SemVerSchema } from '@/schemas';
-import type { Provider as ProviderSchema, Task as TaskSchema } from '@/schemas/config';
+import type { InferProvider, Provider as ProviderSchema, Task as TaskSchema } from '@/schemas/config';
 import type { BumpError, ErrorCodes } from '@/structs/BumpError';
 import type { Options } from '@/structs/Command';
-import type { CommandContext } from '@/types/CommandContext';
 import type { ReadonlyDeep } from 'type-fest';
 
 type Substitutions = { tag: string; subject: string; changelog: string };
@@ -35,7 +34,7 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
   /**
    * The absolute path to the project's root directory.
    */
-  public rootPath!: ReadonlyDeep<CommandContext<T>['rootPath']>;
+  public rootPath!: string;
 
   /**
    * The command-line tool's configuration object.
@@ -43,14 +42,14 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
    * This property references the command-line tool's configuration file,
    * which will alter the behavior of the command-line tool.
    */
-  public config!: ReadonlyDeep<CommandContext<T>['config']>;
+  public config!: InferProvider<T>;
 
   /**
    * Initializes a new `BaseProvider` instance.
    *
    * @param context The execution context of the command-line tool.
    */
-  public constructor(context: ReadonlyDeep<CommandContext<T>>) {
+  public constructor(context: { config: ReadonlyDeep<InferProvider<T>>; rootPath: string }) {
     Object.assign(this, context);
   }
 
