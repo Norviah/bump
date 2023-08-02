@@ -1,5 +1,11 @@
 ## Unreleased
 
+### Bug Fixes
+
+- correctly infer the message from a script error <code>[0ebca62](https://github.com/norviah/bump/commit/0ebca62577770709ff3b14a47a0f21fff8e56dd8)</code>
+
+- **`Changelog`**: change the split character for `simple-git` as the default one may appear in string results <code>[2ea5421](https://github.com/norviah/bump/commit/2ea5421b886769ecc3253247c91d026ce0fbdbd6)</code>
+
 ### Features
 
 - implement a command to create a configuration file <code>[2888c5d](https://github.com/norviah/bump/commit/2888c5d00a426ed0238f7c57fa705b8c78c8d810)</code>
@@ -49,10 +55,6 @@
 - **`Command`**: trim the error's message when catching and displaying a runtime error <code>[7861bae](https://github.com/norviah/bump/commit/7861baea2cc2c022ad269b4873652cd132df1428)</code>
 
 - **`Command`**: move the logic for importing the config file to `InitializeContext` <code>[4c6decb](https://github.com/norviah/bump/commit/4c6decb6ccd15fce36e2b38ac6cc826348f522f3)</code>
-
-### Bug Fixes
-
-- correctly infer the message from a script error <code>[0ebca62](https://github.com/norviah/bump/commit/0ebca62577770709ff3b14a47a0f21fff8e56dd8)</code>
 
 ### Init
 
