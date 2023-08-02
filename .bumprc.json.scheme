@@ -1,0 +1,65 @@
+{
+  "provider": {
+    "type": "json",
+    "path": "package.json"
+  },
+  "tasks": {
+    "pre": [
+      {
+        "name": "ensure source code is formatted",
+        "command": "./node_modules/prettier/bin/prettier.cjs --config .prettierrc.json --list-different ./src"
+      },
+      {
+        "name": "building project",
+        "command": "pnpm run build:src"
+      }
+    ],
+    "post": []
+  },
+  "types": [
+    {
+      "type": "feat",
+      "name": "Features"
+    },
+    {
+      "type": "fix",
+      "name": "Bug Fixes"
+    },
+    {
+      "type": "revert",
+      "name": "Reverted"
+    },
+    {
+      "type": "refactor",
+      "name": "Refactor"
+    },
+    {
+      "type": "build",
+      "name": "Build System"
+    },
+    {
+      "type": "init",
+      "name": "Init"
+    },
+    {
+      "type": "remove",
+      "name": "Removed Features"
+    },
+    {
+      "type": "chore",
+      "hidden": true
+    },
+    {
+      "type": "docs",
+      "hidden": true
+    }
+  ],
+  "prompt": true,
+  "unreleasedHeader": "Unreleased",
+  "breakingHeader": "⚠ Breaking Changes",
+  "includeBody": false,
+  "includeNonConventionalCommits": true,
+  "tag": "v{{after}}",
+  "releaseSubject": "chore(release): {{tag}}",
+  "changelogSubject": "docs(changelog): {{tag}}"
+}
