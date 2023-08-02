@@ -14,7 +14,8 @@
     "/bin",
     "/dist",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/oclif.manifest.json",
+    "/.bumprc.json.scheme"
   ],
   "oclif": {
     "bin": "bump",
@@ -37,8 +38,7 @@
     "exec": "./node_modules/ts-node/dist/bin.js -r tsconfig-paths/register",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "npm run lint",
-    "prepack": "npm run build && oclif manifest && oclif readme",
-    "version": "oclif readme && git add README.md"
+    "prepack": "npm run build && oclif manifest"
   },
   "engines": {
     "node": ">=12.0.0"
