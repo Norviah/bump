@@ -7,7 +7,7 @@ import { dirname } from 'path';
 import * as schemas from '@/schemas';
 import * as regex from '@/util/regex';
 
-import type { Object as Config } from '@/schemas/config';
+import type { Object as ConfigSchema } from '@/schemas/config';
 import type { BaseLog, ConventionalLog, Log } from '@/types/Log';
 import type { Release } from '@/types/Release';
 import type { ReadonlyDeep } from 'type-fest';
@@ -116,7 +116,7 @@ export abstract class Changelog {
    * @returns A dictionary referencing each release, where the key represents
    * a specific release and the value referencing information of that release.
    */
-  public static GroupByRelease(logs: Readonly<BaseLog[]>, config: ReadonlyDeep<Config>): Record<string, Release> {
+  public static GroupByRelease(logs: Readonly<BaseLog[]>, config: ReadonlyDeep<ConfigSchema>): Record<string, Release> {
     const releases: Record<string, Release> = {};
 
     // References the current version to push logs into during the iteration.
@@ -210,7 +210,7 @@ export abstract class Changelog {
    * whether or not to include the body of the commit.
    * @returns The log converted to a string.
    */
-  private static LogToString(log: Log, url: string, config: ReadonlyDeep<Config>): string {
+  private static LogToString(log: Log, url: string, config: ReadonlyDeep<ConfigSchema>): string {
     const hash: string = Changelog.GenerateHashLink(url, log);
 
     // The container for the lines that represent the log converted to a string.
@@ -264,7 +264,10 @@ export abstract class Changelog {
    * @param config The configuration object.
    * @returns The generated section.
    */
-  private static async GenerateSection(releases: { current: Release; previous: Release | undefined }, config: ReadonlyDeep<Config>): Promise<string> {
+  private static async GenerateSection(
+    releases: { current: Release; previous: Release | undefined },
+    config: ReadonlyDeep<ConfigSchema>
+  ): Promise<string> {
     const lines: string[] = [];
 
     const { current, previous } = releases;
@@ -426,7 +429,7 @@ export abstract class Changelog {
    * altering how the changelog is generated.
    * @returns A markdown-formatted string representing the generated changelog.
    */
-  public static async GenerateString(config: ReadonlyDeep<Config>): Promise<string> {
+  public static async GenerateString(config: ReadonlyDeep<ConfigSchema>): Promise<string> {
     // By using the `simple-git` library, it makes it trivial to retrieve all
     // commits within the repository. We're able to import all commits and
     // format each commit to our liking.
@@ -485,7 +488,7 @@ export abstract class Changelog {
    * @param config The configuration object containing configuration values for
    * altering how the changelog is generated.
    */
-  public static async Save(config: ReadonlyDeep<Config> & { output: string }): Promise<void> {
+  public static async Save(config: ReadonlyDeep<ConfigSchema> & { output: string }): Promise<void> {
     if (existsSync(config.output) && !statSync(config.output).isFile()) {
       throw new BumpError(ErrorCodes.INVALID_OUTPUT_PATH);
     } else if (!existsSync(dirname(config.output))) {

@@ -7,9 +7,8 @@ import { Args, Flags } from '@oclif/core';
 
 import * as schemas from '@/schemas';
 
-import type { Provider as ProviderSchema } from '@/schemas/config';
+import type { Object as ConfigSchema, InferProvider, Provider as ProviderSchema } from '@/schemas/config';
 import type { BaseProvider } from '@/structs/providers';
-import type { CommandContext } from '@/types/CommandContext';
 import type { Arg } from '@oclif/core/lib/interfaces/parser';
 import type { ReadonlyDeep } from 'type-fest';
 
@@ -145,6 +144,8 @@ export default class Release extends Command<typeof Release> {
    * and post-bump scripts defined within the configuration file.
    */
   public async run(): Promise<void> {
+    const config: ReadonlyDeep<ConfigSchema> = this.importConfig();
+
     // Initially, we'll determine if the user has provided the `--ensure` flag,
     // if so, we'll ensure the repository does not have any uncommitted changes
     // before continuing.
@@ -159,16 +160,16 @@ export default class Release extends Command<typeof Release> {
     // Using the configuration file, we'll determine the provider to use.
     let provider: BaseProvider<ProviderSchema['type']>;
 
-    if (this.context.config.provider.type === 'json') {
-      provider = new JsonProvider(this.context as ReadonlyDeep<CommandContext<'json'>>);
+    if (config.provider.type === 'json') {
+      provider = new JsonProvider({ config: config as InferProvider<'json'>, rootPath: this.rootPath });
     } else {
-      provider = new TextFileProvider(this.context as ReadonlyDeep<CommandContext<'text'>>);
+      provider = new TextFileProvider({ config: config as InferProvider<'text'>, rootPath: this.rootPath });
     }
 
     // If the user has opted to be prompted before bumping the project, we'll
     // comply with their request and prompt them before continuing. However, if
     // the user has provided the `--force` flag, we'll bypass the prompt.
-    if (this.context.config.prompt && !this.flags.force) {
+    if (config.prompt && !this.flags.force) {
       // When prompting the user, we'll want to inform them of the current
       // version of the project as well as the version the project will be
       // bumped to.

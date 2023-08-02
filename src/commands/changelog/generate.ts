@@ -6,6 +6,9 @@ import { Flags, ux } from '@oclif/core';
 
 import { join, resolve } from 'path';
 
+import type { Object as ConfigSchema } from '@/schemas/config';
+import type { ReadonlyDeep } from 'type-fest';
+
 /**
  * The `changelog generate` subcommand.
  *
@@ -76,14 +79,16 @@ export default class Generate extends Command<typeof Generate> {
    * ```
    */
   public async run(): Promise<void> {
+    const config: ReadonlyDeep<ConfigSchema> = this.importConfig();
+
     // Represents the path to save the changelog to, if a path is not provided,
     // the changelog is instead saved to the project's root directory.
-    const output: string = resolve(this.flags.output ?? join(this.context.rootPath, 'CHANGELOG.md'));
+    const output: string = resolve(this.flags.output ?? join(this.rootPath, 'CHANGELOG.md'));
 
     ux.action.start(Logger.Generate('generating changelog', { title: 'bump' }));
 
     try {
-      await Changelog.Save({ ...this.context.config, output });
+      await Changelog.Save({ ...config, output });
     } catch (error) {
       // If an error occurs during the generation of the changelog, we'll want
       // to first stop the spinner, then throw the error - which will be caught

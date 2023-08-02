@@ -4,7 +4,7 @@ import { Read } from '@/structs/Read';
 import { git } from '@/util/git';
 import { Command as BaseCommand, Flags, Interfaces, ux } from '@oclif/core';
 
-import type { CommandContext } from '@/types/CommandContext';
+import type { Object as ConfigSchema } from '@/schemas/config';
 import type { LoggingOptions } from '@/types/LoggingOptions';
 import type { Config as CommandConfig } from '@oclif/core';
 import type { JsonObject, ReadonlyDeep } from 'type-fest';
@@ -28,13 +28,13 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
   public args!: Args<T>;
 
   /**
-   * Provides important information regarding the command-line tool.
+   * The absolute path to the root directory of the user's project.
    *
-   * The `context` property is available to all commands, which provides
-   * important information regarding the context of the command's execution,
-   * such as a reference to the configuration file or paths.
+   * As the command is only available to git repositories, the root directory
+   * is the top-level directory of the git repository, where the `.git`
+   * directory is located.
    */
-  public context!: ReadonlyDeep<CommandContext>;
+  public rootPath!: string;
 
   /**
    * The base flags for commands.
@@ -124,48 +124,42 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
   public async init(): Promise<void> {
     await super.init();
 
-    // This command must be executed within a git repository, so we'll check if
-    // the current working directory is a git repository. If it isn't, we'll
-    // throw an error.
+    // This command-line tool is only available to git repositories, as all of
+    // the functionalities revolve around git in some way. As such, we'll
+    // enforce that the current working directory is within a git repository.
     if (!(await git.checkIsRepo())) {
       throw new BumpError(ErrorCodes.NOT_A_GIT_REPOSITORY);
     }
 
-    const { args, flags } = await this.parse({
-      flags: this.ctor.flags,
-      baseFlags: (super.ctor as typeof Command).baseFlags,
-      args: this.ctor.args,
-      strict: this.ctor.strict,
-    });
+    // As we're ensured that the command-line tool is being executed within a
+    // git repository, we can set the reference to the root directory of the
+    // user's project.
+    this.rootPath = await git.revparse(['--show-toplevel']);
+
+    // Here, we'll parse the command-line arguments and flags using the commands
+    // explicitly set flags and arguments in addition to any base flags.
+    const { args, flags } = await this.parse({ flags: this.ctor.flags, baseFlags: super.ctor.baseFlags, args: this.ctor.args });
 
     this.flags = flags as Flags<T>;
     this.args = args as Args<T>;
-
-    try {
-      this.context = await Command.InitializeContext({ config: flags.config });
-    } catch (error) {
-      this.error((error as Error).message, { exit: 1 });
-    }
   }
 
   /**
-   * Initializes a new `CommandContext` instance.
+   * Imports the configuration file.
    *
-   * @param paths An optional object containing explicit paths to use when
-   * initializing aspects of the command context.
-   * @returns A new `CommandContext` instance.
+   * By default, the configuration file is assumed to be named `.bumprc.json`
+   * within the root directory of the user's project. However, the user can
+   * specify an alternative path to the file to import.
+   *
+   * If the configuration file is invalid, an error will be thrown.
+   *
+   * @returns The parsed configuration file.
    */
-  public static async InitializeContext(paths?: { config?: string }): Promise<CommandContext> {
-    // As we're working in a git repository, the root directory will be the
-    // top-level directory of the git repository.
-    const root: string = await git.revparse(['--show-toplevel']);
-
-    // Once the root directory has been determined, we'll import the
-    // configuration object from the specified path.
-    const json: JsonObject = Read.JSON(paths?.config ?? `${root}/.bumprc.json`);
+  public importConfig(): ReadonlyDeep<ConfigSchema> {
+    const json: JsonObject = Read.JSON(this.flags.config ?? `${this.rootPath}/.bumprc.json`);
 
     try {
-      return { config: schemas.config.Object.parse(json), rootPath: root };
+      return schemas.config.Object.parse(json);
     } catch (error) {
       throw new BumpError(ErrorCodes.INVALID_CONFIG, error as ZodError);
     }

@@ -157,8 +157,17 @@ export const Object = z.object({
  *
  * @template P The specific provider to extract.
  */
-export type Object<P extends Provider['type'] = Provider['type']> = {
-  [K in keyof z.infer<typeof Object>]: K extends 'provider' ? Extract<Provider, { type: P }> : z.infer<typeof Object>[K];
-};
+export type Object = z.infer<typeof Object>;
 
-export { CommitOption, Provider, Task };
+/**
+ * Extracts the provider from the `Object` schema.
+ *
+ * @template T The specific provider to extract.
+ */
+type InferProvider<T extends Provider['type']> = Readonly<
+  Omit<Object, 'provider'> & {
+    provider: Extract<Object['provider'], { type: T }>;
+  }
+>;
+
+export { CommitOption, Provider, Task, InferProvider };
