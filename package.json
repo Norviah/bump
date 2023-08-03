@@ -23,7 +23,12 @@
     "plugins": [
       "@oclif/plugin-help"
     ],
-    "topicSeparator": " "
+    "topicSeparator": " ",
+    "topics": {
+      "changelog": {
+        "description": "Contains commands revolving around a changelog for your project." 
+      }
+    }
   },
   "types": "dist/index.d.ts",
   "scripts": {
