@@ -7,7 +7,7 @@
     "pre": [
       {
         "name": "ensure source code is formatted",
-        "command": "./node_modules/prettier/bin/prettier.cjs --config .prettierrc.json --list-different ./src"
+        "command": "./node_modules/prettier/bin-prettier.js --config .prettierrc.json --list-different ./src"
       },
       {
         "name": "building project",
