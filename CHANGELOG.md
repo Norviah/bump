@@ -1,4 +1,20 @@
-## Unreleased
+## v1.0.0 (2023-08-02)
+
+### Refactor
+
+- ensure the user is in a git repository <code>[b3728c9](https://github.com/norviah/bump/commit/b3728c9ce85f1ffcf884d8796b667e20a20d89f9)</code>
+
+- move the validation logic for saving changelogs into the  structure <code>[0ebf261](https://github.com/norviah/bump/commit/0ebf26188bb8688341c3686a9435293389783e24)</code>
+
+- implement a class to provide methods for reading from files <code>[48b68fd](https://github.com/norviah/bump/commit/48b68fdd452fc7b32442fd9c06cc5a7e8d72cbc6)</code>
+
+- **`command/init`**: refactor the template for the configuration file to a JSON object <code>[191e0e9](https://github.com/norviah/bump/commit/191e0e914f8afb100a578e8046751e839452fc77)</code>
+
+- **`Command`**: refactor the logic for initializing a command's context to a method that only imports the config file <code>[9cec404](https://github.com/norviah/bump/commit/9cec404c95ee83320fbfd52f8adb87c36de5a787)</code>
+
+- **`Command`**: trim the error's message when catching and displaying a runtime error <code>[7861bae](https://github.com/norviah/bump/commit/7861baea2cc2c022ad269b4873652cd132df1428)</code>
+
+- **`Command`**: move the logic for importing the config file to `InitializeContext` <code>[4c6decb](https://github.com/norviah/bump/commit/4c6decb6ccd15fce36e2b38ac6cc826348f522f3)</code>
 
 ### Bug Fixes
 
@@ -41,20 +57,6 @@
 - **deps**: add the dependency `simple-git` for working with git <code>[37ed211](https://github.com/norviah/bump/commit/37ed211f5d3aa5e51fd285188b2ede5543526c60)</code>
 
 - **types**: implement a type to infer arguments and flags of a command <code>[8218176](https://github.com/norviah/bump/commit/82181766670379f35458f800a55279115d17de09)</code>
-
-### Refactor
-
-- ensure the user is in a git repository <code>[b3728c9](https://github.com/norviah/bump/commit/b3728c9ce85f1ffcf884d8796b667e20a20d89f9)</code>
-
-- move the validation logic for saving changelogs into the  structure <code>[0ebf261](https://github.com/norviah/bump/commit/0ebf26188bb8688341c3686a9435293389783e24)</code>
-
-- implement a class to provide methods for reading from files <code>[48b68fd](https://github.com/norviah/bump/commit/48b68fdd452fc7b32442fd9c06cc5a7e8d72cbc6)</code>
-
-- **`Command`**: refactor the logic for initializing a command's context to a method that only imports the config file <code>[9cec404](https://github.com/norviah/bump/commit/9cec404c95ee83320fbfd52f8adb87c36de5a787)</code>
-
-- **`Command`**: trim the error's message when catching and displaying a runtime error <code>[7861bae](https://github.com/norviah/bump/commit/7861baea2cc2c022ad269b4873652cd132df1428)</code>
-
-- **`Command`**: move the logic for importing the config file to `InitializeContext` <code>[4c6decb](https://github.com/norviah/bump/commit/4c6decb6ccd15fce36e2b38ac6cc826348f522f3)</code>
 
 ### Init
 
