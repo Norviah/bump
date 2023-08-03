@@ -1,6 +1,6 @@
 {
   "name": "@norviah/bump",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Simplify the release process of your projects",
   "author": "norviah",
   "bin": {
@@ -26,7 +26,7 @@
     "topicSeparator": " ",
     "topics": {
       "changelog": {
-        "description": "Contains commands revolving around a changelog for your project." 
+        "description": "Contains commands revolving around a changelog for your project."
       }
     }
   },
