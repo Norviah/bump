@@ -1,6 +1,85 @@
 import { Command } from '@/structs/Command';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
+
+import type { Object as ConfigSchema } from '@/schemas/config';
+import type { Explicit } from '@/types/ts/Explicit';
+
+const CONFIG_TEMPLATE: Explicit<ConfigSchema> = {
+  tasks: {
+    pre: [
+      {
+        name: 'ensure source code is formatted',
+        command: './node_modules/prettier/bin/prettier.cjs --config .prettierrc.json --list-different ./src',
+        timeout: 15000,
+      },
+      {
+        name: 'ensure source code can be built',
+        command: 'pnpm run build',
+        timeout: 15000,
+      },
+    ],
+    post: [],
+  },
+  provider: {
+    type: 'json',
+    path: 'package.json',
+    key: 'version',
+  },
+  types: [
+    {
+      type: 'feat',
+      name: 'Features',
+      hidden: false,
+    },
+    {
+      type: 'fix',
+      name: 'Bug Fixes',
+      hidden: false,
+    },
+    {
+      type: 'revert',
+      name: 'Reverted',
+      hidden: false,
+    },
+    {
+      type: 'refactor',
+      name: 'Refactor',
+      hidden: false,
+    },
+    {
+      type: 'build',
+      name: 'Build System',
+      hidden: false,
+    },
+    {
+      type: 'init',
+      name: 'Init',
+      hidden: false,
+    },
+    {
+      type: 'remove',
+      name: 'Removed Features',
+      hidden: false,
+    },
+    {
+      type: 'chore',
+      hidden: true,
+    },
+    {
+      type: 'docs',
+      hidden: true,
+    },
+  ],
+  prompt: false,
+  unreleasedHeader: 'Unreleased',
+  breakingHeader: '⚠ Breaking Changes',
+  includeBody: false,
+  includeNonConventionalCommits: true,
+  tag: 'v{{after}}',
+  releaseSubject: 'chore(release): {{tag}}',
+  changelogSubject: 'docs(changelog): {{tag}}',
+};
 
 /**
  * The `init` command.
@@ -51,7 +130,7 @@ export default class Init extends Command<typeof Init> {
       }
     }
 
-    writeFileSync(output, readFileSync(join(this.config.root, '.bumprc.json.scheme')));
+    writeFileSync(output, JSON.stringify(CONFIG_TEMPLATE, null, 2));
 
     this.info(`saved configuration file to ${output}`);
   }
