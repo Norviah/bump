@@ -43,7 +43,7 @@ export abstract class Command<T extends typeof BaseCommand> extends BaseCommand 
    * regardless of the command.
    */
   public static baseFlags = {
-    config: Flags.file({ char: 'c', required: false, description: 'an alternative configuration file to use' }),
+    config: Flags.file({ char: 'c', required: false, description: 'An alternative configuration file to use.' }),
   };
 
   /**
