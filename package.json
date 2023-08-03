@@ -14,8 +14,7 @@
     "/bin",
     "/dist",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json",
-    "/.bumprc.json.scheme"
+    "/oclif.manifest.json"
   ],
   "oclif": {
     "bin": "bump",
