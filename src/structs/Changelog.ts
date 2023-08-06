@@ -237,13 +237,13 @@ export abstract class Changelog {
       // split the body into lines and indent each line accordingly.
       const bodyLines: string[] = log.body.split('\n');
 
-      lines.push('\n');
+      lines.push('');
       for (const line of bodyLines) {
         lines.push(`\t${line}`);
       }
     }
 
-    return lines.join('\n');
+    return lines.join('\n').trim();
   }
 
   /**
