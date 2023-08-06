@@ -1,3 +1,20 @@
+## Unreleased
+
+### Refactor
+
+- **`Changelog`**: remove extra padding when including the body for commits <code>[51bddc6](https://github.com/norviah/bump/commit/51bddc64fd6920a04a5ffbf91853ce0892954d82)</code>
+
+### Features
+
+- **config**: add a `noSpinner` option to disable the spinner when running commands <code>[e825162](https://github.com/norviah/bump/commit/e8251625b439e25754da3a3a381c217bb2da3c01)</code>
+
+	The issue with spinners is that they refresh the terminal for each
+	frame, causes problems for scripts that require input from the user as
+	the prompt for the input is erased.
+	
+	The `noSpinner` option allows the user to disable a spinner for a
+	specific script, which will prevent the screen from being refreshed.
+
 ## v1.0.0 (2023-08-02)
 
 ### Refactor
