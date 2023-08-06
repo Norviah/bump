@@ -14,7 +14,13 @@
         "command": "pnpm run build:src"
       }
     ],
-    "post": []
+    "post": [
+      {
+        "name": "publishing to npm",
+        "command": "pnpm publish",
+        "noSpinner": true
+      }
+    ]
   },
   "types": [
     {
