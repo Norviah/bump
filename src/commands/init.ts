@@ -12,11 +12,13 @@ const CONFIG_TEMPLATE: Explicit<ConfigSchema> = {
         name: 'ensure source code is formatted',
         command: './node_modules/prettier/bin/prettier.cjs --config .prettierrc.json --list-different ./src',
         timeout: 15000,
+        noSpinner: false,
       },
       {
         name: 'ensure source code can be built',
         command: 'pnpm run build',
         timeout: 15000,
+        noSpinner: false,
       },
     ],
     post: [],
