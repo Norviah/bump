@@ -157,10 +157,23 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
     for (let i = 0; i < tasks.length; i++) {
       const task: ReadonlyDeep<TaskSchema> = tasks[i];
 
-      // Oclif fortunately provides useful components for working with the
-      // command-line tool, in this case, we can use the action component to
-      // present the user with a loading indicator.
-      ux.action.start(Logger.Generate(`executing task: ${task.name}`, { title: phase }));
+      const log = Logger.Generate(`executing task: ${task.name}`, { title: phase });
+
+      // When executing the task, we'll want to display a spinner to present to
+      // the user that the task is currently running. Oclif provides useful
+      // components for working with the command-line tool, in this case, we
+      // can use the action component to present a loading indiciator.
+
+      // However, if the task has specified the `noSpinner` flag, we'll want to
+      // simply print the task. The issue with spinners is that they erase the
+      // terminal's output, if the script requires user input, the spinner will
+      // erase the prompt.
+
+      if (!task.noSpinner) {
+        ux.action.start(log);
+      } else {
+        console.log(`${log}...`);
+      }
 
       try {
         // We'll then execute the command, forcing it to run within the root
@@ -178,7 +191,9 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
       } catch (error) {
         // If an error occurs, we'll stop the loading indicator and print the
         // error to the console.
-        ux.action.stop(icons.X);
+        if (!task.noSpinner) {
+          ux.action.stop(icons.X);
+        }
 
         console.log(`\n${(error as BumpError<ErrorCodes.SCRIPT_ERROR>).message.trim()}\n`);
 
