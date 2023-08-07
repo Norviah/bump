@@ -1,3 +1,9 @@
+## [v1.1.1](https://github.com/norviah/bump/compare/v1.1.0...v1.1.1) (2023-08-07)
+
+### Bug Fixes
+
+- **`Changelog`**: trim the result when accessing the repo's url <code>[c145b71](https://github.com/norviah/bump/commit/c145b7131ab0bf8ad6b3be2075419632bb56ee30)</code>
+
 ## [v1.1.0](https://github.com/norviah/bump/compare/v1.0.0...v1.1.0) (2023-08-06)
 
 ### Refactor
