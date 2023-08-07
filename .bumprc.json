@@ -16,6 +16,10 @@
     ],
     "post": [
       {
+        "name": "pushing to github",
+        "command": "git push --follow-tags"
+      },
+      {
         "name": "publishing to npm",
         "command": "pnpm publish",
         "noSpinner": true
