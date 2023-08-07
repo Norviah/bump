@@ -85,7 +85,7 @@ export abstract class Changelog {
   public static async GitURL(): Promise<string> {
     // Initially, we'll use the client to run the `git remote get-url origin`
     // command, which will return either a HTTPS or SSH URL for the repository.
-    const url: string | void = await git.remote(['get-url', 'origin']);
+    const url: string | void = (await git.remote(['get-url', 'origin']))?.trim();
 
     if (!url) {
       throw new BumpError(ErrorCodes.NOT_A_GIT_REPOSITORY);
