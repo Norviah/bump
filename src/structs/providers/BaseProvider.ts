@@ -150,8 +150,9 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
    * specified phase.
    *
    * @param phase The specific phase of the process to execute the tasks for.
+   * @param options Options for the execution of the tasks.
    */
-  private async executeTasks(phase: 'pre' | 'post', options: Options<typeof ReleaseCommand>): Promise<void> {
+  public async executeTasks(phase: 'pre' | 'post', options: { verbose?: boolean }): Promise<void> {
     const tasks: readonly ReadonlyDeep<TaskSchema>[] = this.config.tasks[phase];
 
     for (let i = 0; i < tasks.length; i++) {
