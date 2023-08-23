@@ -71,6 +71,12 @@ export enum ErrorCodes {
    * want to work with a clean one.
    */
   DIRTY_REPO = 'DIRTY_REPO',
+
+  /**
+   * The event where the user runs the `phsae` command, but did not specify any
+   * tasks to run for the specified phase.
+   */
+  NO_SPECIFIED_TASKS = 'NO_SPECIFIED_TASKS',
 }
 
 const Messages = {
@@ -203,6 +209,16 @@ const Messages = {
    */
   DIRTY_REPO: (): string => {
     return 'the git repository is dirty.';
+  },
+
+  /**
+   * Generates the error message for the `NO_SPECIFIED_TASKS` error code.
+   *
+   * @param phase The phase that was specified.
+   * @returns The generated error message.
+   */
+  NO_SPECIFIED_TASKS: (phase: 'pre' | 'post'): string => {
+    return `no tasks were specified for the ${phase}-bump phase.`;
   },
 };
 
