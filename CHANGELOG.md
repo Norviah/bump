@@ -1,3 +1,12 @@
+## [v1.2.0](https://github.com/norviah/bump/compare/v1.1.1...v1.2.0) (2023-08-23)
+
+### Features
+
+- implement the `phase` command to execute a specific phase <code>[08d78f7](https://github.com/norviah/bump/commit/08d78f71b5f2f147f8068eab33b967981acc96d2)</code>
+
+	With this new command, the tool can execute scripts within the specified
+	phase without bumping the project's version.
+
 ## [v1.1.1](https://github.com/norviah/bump/compare/v1.1.0...v1.1.1) (2023-08-07)
 
 ### Bug Fixes
