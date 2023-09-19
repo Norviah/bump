@@ -247,6 +247,42 @@ export abstract class Changelog {
   }
 
   /**
+   * Orders the provided logs as specified within the configuration object.
+   *
+   * @param logs The logs to order.
+   * @param config The configuration object.
+   */
+  private static Sort(logs: ConventionalLog[], config: ReadonlyDeep<ConfigSchema>): ConventionalLog[] {
+    let sorted: ConventionalLog[];
+
+    if (config.commitOrder === 'default') {
+      sorted = logs;
+    } else if (config.commitOrder === 'asc') {
+      sorted = logs.sort((a, b) => {
+        return new Date(b.long_date).getTime() - new Date(a.long_date).getTime();
+      });
+    } else if (config.commitOrder === 'desc') {
+      sorted = logs.sort((a, b) => {
+        return new Date(a.long_date).getTime() - new Date(b.long_date).getTime();
+      });
+    } else {
+      sorted = logs.sort((a, b) => {
+        if (a.message.scope && b.message.scope === undefined) {
+          return 1;
+        } else if (a.message.scope === undefined && b.message.scope) {
+          return -1;
+        } else if (a.message.scope && b.message.scope) {
+          return a.message.scope.localeCompare(b.message.scope);
+        }
+
+        return 0;
+      });
+    }
+
+    return sorted;
+  }
+
+  /**
    * Generates a section for a release.
    *
    * This method implements the logic for generating a section within the
@@ -371,22 +407,7 @@ export abstract class Changelog {
 
       lines.push(`### ${options?.name ?? type}\n`);
 
-      // Before pushing the commits, we'll want to sort them by their scope, if
-      // specified. This will ensure that commits with a scope will be grouped
-      // together within the changelog, rather than being scattered throughout.
-      logs.sort((a, b) => {
-        if (a.message.scope && b.message.scope === undefined) {
-          return 1;
-        } else if (a.message.scope === undefined && b.message.scope) {
-          return -1;
-        } else if (a.message.scope && b.message.scope) {
-          return a.message.scope.localeCompare(b.message.scope);
-        }
-
-        return 0;
-      });
-
-      for (const log of logs) {
+      for (const log of this.Sort(logs, config)) {
         lines.push(`${Changelog.LogToString(log, url, config)}\n`);
       }
     }
@@ -447,6 +468,7 @@ export abstract class Changelog {
         author_email: '%aE',
         short_hash: '%h',
         merge: '%P',
+        long_date: '%aD',
       },
 
       splitter: 'ƻ',

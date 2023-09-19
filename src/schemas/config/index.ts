@@ -103,6 +103,21 @@ export const Object = z.object({
   includeBody: z.boolean().default(false),
 
   /**
+   * Determines the order in which commits are displayed within the changelog.
+   *
+   * When generating a changelog, the command-line tool will group commits into
+   * sections determined by the release the commit is under. With this option,
+   * the user can specify the order in which commits are displayed within each
+   * section.
+   *
+   * - `default`: commits are displayed in the order they are found,
+   * - `asc`: commits are displayed in ascending order,
+   * - `desc`: commits are displayed in descending order,
+   * - `alphabetical`: commits are displayed in alphabetical order.
+   */
+  commitOrder: z.enum(['default', 'asc', 'desc', 'alphabetical']).default('default'),
+
+  /**
    * Whether to include non-conventional commits when generating the
    * changelog.
    *
