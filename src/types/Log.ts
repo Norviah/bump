@@ -15,6 +15,7 @@ export type BaseLog = DefaultLogFields &
   ListLogLine & {
     short_hash: string;
     merge: string;
+    long_date: string;
   };
 
 /**

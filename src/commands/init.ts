@@ -81,6 +81,7 @@ const CONFIG_TEMPLATE: Explicit<ConfigSchema> = {
   tag: 'v{{after}}',
   releaseSubject: 'chore(release): {{tag}}',
   changelogSubject: 'docs(changelog): {{tag}}',
+  commitOrder: 'default',
 };
 
 /**
