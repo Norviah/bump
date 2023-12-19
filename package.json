@@ -1,6 +1,6 @@
 {
   "name": "@norviah/bump",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Simplify the release process of your projects",
   "author": "norviah",
   "bin": {
