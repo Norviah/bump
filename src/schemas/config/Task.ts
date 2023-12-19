@@ -20,7 +20,7 @@ export const Task = z.object({
    * If a task takes longer than this amount of time to run, an error will be
    * thrown and the release process will be aborted.
    */
-  timeout: z.number().default(15000),
+  timeout: z.number().optional(),
 
   /**
    * Whether if the tool should show a spinner while the task is running.
