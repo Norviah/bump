@@ -1,5 +1,11 @@
 ## Unreleased
 
+### Bug Fixes
+
+- **commands/hook**: ensure backslashes are properly escaped <code>[ffc9874](https://github.com/norviah/bump/commit/ffc9874dfb122e1dc0d7dcf94b7ba4459dc97a25)</code>
+
+## [v1.4.0](https://github.com/norviah/bump/compare/v1.3.0...v1.4.0) (2023-12-19)
+
 ### Refactor
 
 - **config**: set the `timeout` to be nullable <code>[442b9fb](https://github.com/norviah/bump/commit/442b9fb9c104f505207bbf6ced7acba10cc5cb8a)</code>
