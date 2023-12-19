@@ -10,7 +10,7 @@ import type { ExecaError } from 'execa';
  * @param options Options for the script execution.
  * @returns The output of the command.
  */
-export async function run(command: string, options?: { root?: string; timeout: number }): Promise<string> {
+export async function run(command: string, options?: { root?: string; timeout?: number }): Promise<string> {
   try {
     const response = await exec(command, {
       cwd: options?.root,
