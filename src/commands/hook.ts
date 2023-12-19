@@ -14,8 +14,7 @@ const SCRIPT: string = `#!/bin/sh
 
 COMMIT_MSG_FILE=$1
 
-# pattern="^(?<type>\\w+)(?:\\((?<scope>.*)\\))?\\s?(?<breaking>!)?\\s?:\\s?(?<description>.*)$"  # Example pattern: Must start with "ISSUE-" followed by a number and a colon, then any message
-PATTERN="^(\w+)(\((.*)\))?\s?(!)?\s?:\s?(.*)$"
+PATTERN="^(\\w+)(\\((.*)\\))?\\s?(!)?\\s?:\\s?(.*)$"
 
 # Read the commit message
 COMMIT_MSG=$(cat $COMMIT_MSG_FILE)
