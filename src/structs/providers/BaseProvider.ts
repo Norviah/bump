@@ -214,22 +214,22 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
     // aspects of the new release.
     //
     // The placeholders supported are:
-    //   - `{{after}}`: represents the new version of the project,
-    //   - `{{before}}`: represents the previous version of the project,
+    //   - `{{newVersion}}`: represents the new version of the project,
+    //   - `{{oldVersion}}`: represents the previous version of the project,
     //   - `{{tag}}`: represents the actual tag of the release.
 
     const tag: string = replace(this.config.tag, {
-      '{{after}}': options.after,
-      '{{before}}': options.before,
+      '{{newVersion}}': options.after,
+      '{{oldVersion}}': options.before,
     });
     const subject: string = replace(this.config.releaseSubject, {
-      '{{after}}': options.after,
-      '{{before}}': options.before,
+      '{{newVersion}}': options.after,
+      '{{oldVersion}}': options.before,
       '{{tag}}': tag,
     });
     const changelog: string = replace(this.config.changelogSubject, {
-      '{{after}}': options.after,
-      '{{before}}': options.before,
+      '{{newVersion}}': options.after,
+      '{{oldVersion}}': options.before,
       '{{tag}}': tag,
     });
 

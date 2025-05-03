@@ -1,6 +1,6 @@
-import { Command } from '@/structs/Command';
 import { existsSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
+import { Command } from '@/structs/Command';
 
 import type { Object as ConfigSchema } from '@/schemas/config';
 import type { Explicit } from '@/types/ts/Explicit';
@@ -76,7 +76,7 @@ const CONFIG_TEMPLATE: Explicit<ConfigSchema> = {
   breakingHeader: '⚠ Breaking Changes',
   includeBody: false,
   includeNonConventionalCommits: true,
-  tag: 'v{{after}}',
+  tag: 'v{{newVersion}}',
   releaseSubject: 'chore(release): {{tag}}',
   changelogSubject: 'docs(changelog): {{tag}}',
   commitOrder: 'default',
@@ -99,7 +99,7 @@ export default class Init extends Command<typeof Init> {
    * A small, brief description regarding the command and its purpose. This
    * summary is displayed when the user asks for help regarding the command.
    */
-  public static summary: string = 'Creates a configuration file for the project.';
+  public static summary = 'Creates a configuration file for the project.';
 
   /**
    * The command's description.
@@ -108,7 +108,7 @@ export default class Init extends Command<typeof Init> {
    * property should describe the command in more detail than the `summary`
    * property.
    */
-  public static description: string = 'If you are initializing a new project, this command will create a configuration file for you to edit.';
+  public static description = 'If you are initializing a new project, this command will create a configuration file for you to edit.';
 
   /**
    * Examples for the command.
