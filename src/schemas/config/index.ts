@@ -141,17 +141,17 @@ export const Object = z.object({
    * string as the tag's name.
    *
    * The following placeholders are available for use:
-   *   - `{{before}}`: the version before the release,
-   *   - `{{after}}`: the version after the release.
+   *   - `{{oldVersion}}`: the version before the release,
+   *   - `{{newVersion}}`: the version after the release.
    */
-  tag: z.string().default('v{{after}}'),
+  tag: z.string().default('v{{newVersion}}'),
 
   /**
    * The message to use when creating a release commit.
    *
    * The following placeholders are available for use:
-   * - `{{before}}`: the version before the release,
-   * - `{{after}}`: the version after the release,
+   * - `{{oldVersion}}`: the version before the release,
+   * - `{{newVersion}}`: the version after the release,
    * - `{{tag}}`: the actual tag used for the release.
    */
   releaseSubject: z.string().default('chore(release): {{tag}}'),
@@ -160,8 +160,8 @@ export const Object = z.object({
    * The subject for the commit when generating a changelog after a release.
    *
    * The following placeholders are available for use:
-   * - `{{before}}`: the version before the release,
-   * - `{{after}}`: the version after the release,
+   * - `{{oldVersion}}`: the version before the release,
+   * - `{{newVersion}}`: the version after the release,
    * - `{{tag}}`: the actual tag used for the release.
    */
   changelogSubject: z.string().default('docs(changelog): {{tag}}'),
@@ -185,4 +185,4 @@ type InferProvider<T extends Provider['type']> = Readonly<
   }
 >;
 
-export { CommitOption, Provider, Task, InferProvider };
+export { CommitOption, Provider, Task, type InferProvider };
