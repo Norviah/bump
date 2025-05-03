@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-import { isAbsolute, resolve } from 'path';
+import { isAbsolute, resolve } from 'node:path';
 import { Changelog } from '@/structs/Changelog';
 import { Logger } from '@/structs/Logger';
 import { bump } from '@/util/bump';
@@ -107,35 +107,6 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
    */
   public get file(): string {
     return this.absolute(this.config.provider.path);
-  }
-
-  /**
-   * Updates the project's version in respect to the specified release type.
-   *
-   * @param type The type of release to perform.
-   * @returns A reference to the project's version before and after the bump
-   * process.
-   */
-  public update(type: ReleaseSchema): {
-    before: SemVerSchema;
-    after: SemVerSchema;
-  } {
-    // Before bumping the project's version, we'll first want to save a
-    // reference to the project's version before the bump process.
-    const before: SemVerSchema = this.version();
-
-    const after: SemVerSchema = bump(before, type);
-
-    // Once the project's version has been bumped, we'll want to save the
-    // version to disk, to whatever medium the provider is responsible
-    // for.
-
-    // The logic for this is implemented within the `save` method, which
-    // is abstracted to the provider, as each provider will have a unique
-    // medium to save the project's version to.
-    this.save(after);
-
-    return { before, after };
   }
 
   /**
@@ -373,13 +344,11 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
    * command, which will alter the behavior of the bump process.
    */
   public async bump(options: Options<typeof ReleaseCommand>): Promise<void> {
-    // After the pre-bump scripts have been executed, and no errors have been
-    // thrown, we'll update the project's version.
-
     // When the project's version has been bumped, we'll have a reference to the
     // project's version before and after the bump process. We'll use these
     // references to generate aspects of the commit.
-    const { before: oldVersion, after: newVersion } = this.update(options.type);
+    const oldVersion = this.version();
+    const newVersion = bump(oldVersion, options.type);
 
     if (this.config.tasks.pre.length > 0) {
       // First, we'll execute all pre-bump scripts as defined within the config
@@ -390,9 +359,18 @@ export abstract class BaseProvider<T extends ProviderSchema['type']> {
       console.log();
     }
 
+    // Once all pre-scripts have finished, we'll want to save the
+    // version to disk, to whatever medium the provider is responsible
+    // for.
+
+    // The logic for this is implemented within the `save` method, which
+    // is abstracted to the provider, as each provider will have a unique
+    // medium to save the project's version to.
+    this.save(newVersion);
+
     Logger.Print(`bumped version from ${chalk.bold(oldVersion)} to ${chalk.bold(newVersion)}`, { title: 'bump' });
 
-    // Before continuring, we'll want to get a reference to the strings used for
+    // Before continueing, we'll want to get a reference to the strings used for
     // the tag and various commit subjects. These strings are given by the user,
     // but they may also contain placeholders, which will be substituted for.
     const substitutions: Substitutions = this.substitute({
