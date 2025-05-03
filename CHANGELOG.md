@@ -1,3 +1,13 @@
+## [v{{after}}](https://github.com/Norviah/bump/compare/v1.5.0...v{{after}}) (2025-05-03)
+
+### Bug Fixes
+
+- update references to use new value placeholders <code>[bf0118b](https://github.com/Norviah/bump/commit/bf0118b3fe860fe3a6e7c4d7baaf483bca5bc80c)</code>
+
+- **config**: re-reference `{{after}}` and `{{before}}` to `{{newVersion}}` and `{{oldVersion}}` <code>[34132e1](https://github.com/Norviah/bump/commit/34132e13380377a4acf4db0386d0f28a9d43b61f)</code>
+
+- save the new version after the pre phase <code>[ae9176e](https://github.com/Norviah/bump/commit/ae9176efd57ecc0f684d884e14604b1ce6eebf35)</code>
+
 ## v1.5.0 (2025-05-03)
 
 ### Features
