@@ -69,7 +69,7 @@
   "breakingHeader": "⚠ Breaking Changes",
   "includeBody": true,
   "includeNonConventionalCommits": true,
-  "tag": "v{{after}}",
+  "tag": "v{{newVersion}}",
   "releaseSubject": "chore(release): {{tag}}",
   "changelogSubject": "docs(changelog): {{tag}}"
 }
