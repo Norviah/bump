@@ -1,29 +1,22 @@
-import chalk from "chalk";
+import chalk from 'chalk';
 
-import { isAbsolute, resolve } from "path";
-import { Changelog } from "@/structs/Changelog";
-import { Logger } from "@/structs/Logger";
-import { bump } from "@/util/bump";
-import { git } from "@/util/git";
-import { icons } from "@/util/icons";
-import { replace } from "@/util/replace";
-import { run } from "@/util/run";
-import { ux } from "@oclif/core";
+import { isAbsolute, resolve } from 'path';
+import { Changelog } from '@/structs/Changelog';
+import { Logger } from '@/structs/Logger';
+import { bump } from '@/util/bump';
+import { git } from '@/util/git';
+import { icons } from '@/util/icons';
+import { replace } from '@/util/replace';
+import { run } from '@/util/run';
+import { ux } from '@oclif/core';
 
-import type ReleaseCommand from "@/commands/release";
+import type ReleaseCommand from '@/commands/release';
 
-import type {
-  Release as ReleaseSchema,
-  SemVer as SemVerSchema,
-} from "@/schemas";
-import type {
-  InferProvider,
-  Provider as ProviderSchema,
-  Task as TaskSchema,
-} from "@/schemas/config";
-import type { BumpError, ErrorCodes } from "@/structs/BumpError";
-import type { Options } from "@/structs/Command";
-import type { ReadonlyDeep } from "type-fest";
+import type { Release as ReleaseSchema, SemVer as SemVerSchema } from '@/schemas';
+import type { InferProvider, Provider as ProviderSchema, Task as TaskSchema } from '@/schemas/config';
+import type { BumpError, ErrorCodes } from '@/structs/BumpError';
+import type { Options } from '@/structs/Command';
+import type { ReadonlyDeep } from 'type-fest';
 
 type Substitutions = { tag: string; subject: string; changelog: string };
 
@@ -37,7 +30,7 @@ type Substitutions = { tag: string; subject: string; changelog: string };
  *
  * @template T The type of the provider.
  */
-export abstract class BaseProvider<T extends ProviderSchema["type"]> {
+export abstract class BaseProvider<T extends ProviderSchema['type']> {
   /**
    * The absolute path to the project's root directory.
    */
@@ -56,10 +49,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
    *
    * @param context The execution context of the command-line tool.
    */
-  public constructor(context: {
-    config: ReadonlyDeep<InferProvider<T>>;
-    rootPath: string;
-  }) {
+  public constructor(context: { config: ReadonlyDeep<InferProvider<T>>; rootPath: string }) {
     Object.assign(this, context);
   }
 
@@ -165,10 +155,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
    * @param phase The specific phase of the process to execute the tasks for.
    * @param options Options for the execution of the tasks.
    */
-  public async executeTasks(
-    phase: "pre" | "post",
-    options: { verbose?: boolean; oldVersion?: string; newVersion?: string },
-  ): Promise<void> {
+  public async executeTasks(phase: 'pre' | 'post', options: { verbose?: boolean; oldVersion?: string; newVersion?: string }): Promise<void> {
     const tasks: readonly ReadonlyDeep<TaskSchema>[] = this.config.tasks[phase];
 
     for (let i = 0; i < tasks.length; i++) {
@@ -196,8 +183,8 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
 
       try {
         const command = task.command
-          .replaceAll("{{newVersion}}", options.newVersion ?? this.version())
-          .replaceAll("{{oldVersion}}", options.oldVersion ?? this.version());
+          .replaceAll('{{newVersion}}', options.newVersion ?? this.version())
+          .replaceAll('{{oldVersion}}', options.oldVersion ?? this.version());
 
         // We'll then execute the command, forcing it to run within the root
         // directory of the project. If the command returns a non-zero exit
@@ -212,9 +199,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
         // If the script has an output, and the user has specified the `verbose`
         // flag, we'll print the output to the console.
         if (options.verbose && result.length > 0) {
-          console.log(
-            `\n${result.trim()}${i === tasks.length - 1 ? "" : "\n"}`,
-          );
+          console.log(`\n${result.trim()}${i === tasks.length - 1 ? '' : '\n'}`);
         }
       } catch (error) {
         // If an error occurs, we'll stop the loading indicator and print the
@@ -223,9 +208,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
           ux.action.stop(icons.X);
         }
 
-        console.log(
-          `\n${(error as BumpError<ErrorCodes.SCRIPT_ERROR>).message.trim()}\n`,
-        );
+        console.log(`\n${(error as BumpError<ErrorCodes.SCRIPT_ERROR>).message.trim()}\n`);
 
         // We'll then throw an error, halting the bump process.
         throw new Error(`task \`${task.name}\` failed`);
@@ -253,7 +236,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
     options: Options<typeof ReleaseCommand> & {
       before: SemVerSchema;
       after: SemVerSchema;
-    },
+    }
   ): Substitutions {
     // The strings are defined by the user within the configuration file,
     // however, we provider placeholders for the user to use, to reference
@@ -265,18 +248,18 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
     //   - `{{tag}}`: represents the actual tag of the release.
 
     const tag: string = replace(this.config.tag, {
-      "{{after}}": options.after,
-      "{{before}}": options.before,
+      '{{after}}': options.after,
+      '{{before}}': options.before,
     });
     const subject: string = replace(this.config.releaseSubject, {
-      "{{after}}": options.after,
-      "{{before}}": options.before,
-      "{{tag}}": tag,
+      '{{after}}': options.after,
+      '{{before}}': options.before,
+      '{{tag}}': tag,
     });
     const changelog: string = replace(this.config.changelogSubject, {
-      "{{after}}": options.after,
-      "{{before}}": options.before,
-      "{{tag}}": tag,
+      '{{after}}': options.after,
+      '{{before}}': options.before,
+      '{{tag}}': tag,
     });
 
     return { tag, subject, changelog };
@@ -296,9 +279,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
    * @param options A reference to the arguments and flags for the `release`
    * command.
    */
-  public async commit(
-    options: Options<typeof ReleaseCommand> & { substitutions: Substitutions },
-  ): Promise<void> {
+  public async commit(options: Options<typeof ReleaseCommand> & { substitutions: Substitutions }): Promise<void> {
     const { tag, subject } = options.substitutions;
 
     // After the project's version has been bumped, we'll want to commit the
@@ -326,10 +307,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
     // reference the release. Similar to the commit message, we'll format the
     // tag to reference the provided body.
 
-    await git.addAnnotatedTag(
-      tag,
-      options.body ? `${tag}\n\n${options.body}` : tag,
-    );
+    await git.addAnnotatedTag(tag, options.body ? `${tag}\n\n${options.body}` : tag);
   }
 
   /**
@@ -345,10 +323,8 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
    * @param options A reference to the arguments and flags for the `release`
    * command.
    */
-  public async generateChangelog(
-    options: Options<typeof ReleaseCommand> & { substitutions: Substitutions },
-  ): Promise<void> {
-    ux.action.start(Logger.Generate("generating changelog", { title: "bump" }));
+  public async generateChangelog(options: Options<typeof ReleaseCommand> & { substitutions: Substitutions }): Promise<void> {
+    ux.action.start(Logger.Generate('generating changelog', { title: 'bump' }));
 
     // First, we'll need to determine where to save the changelog. Through the
     // `release` command, the user may enter the `--output` flag to specify the
@@ -356,7 +332,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
 
     // If the user does not specify this flag, the changelog is saved under the
     // the project's root directory, under the name `CHANGELOG.md`.
-    const output: string = this.absolute(options.output || "CHANGELOG.md");
+    const output: string = this.absolute(options.output || 'CHANGELOG.md');
 
     try {
       await Changelog.Save({ ...this.config, output });
@@ -409,15 +385,12 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
       // First, we'll execute all pre-bump scripts as defined within the config
       // file, if any script returns a non-zero exit code, an error is thrown
       // and the bump process is halted.
-      await this.executeTasks("pre", { ...options, oldVersion, newVersion });
+      await this.executeTasks('pre', { ...options, oldVersion, newVersion });
 
       console.log();
     }
 
-    Logger.Print(
-      `bumped version from ${chalk.bold(oldVersion)} to ${chalk.bold(newVersion)}`,
-      { title: "bump" },
-    );
+    Logger.Print(`bumped version from ${chalk.bold(oldVersion)} to ${chalk.bold(newVersion)}`, { title: 'bump' });
 
     // Before continuring, we'll want to get a reference to the strings used for
     // the tag and various commit subjects. These strings are given by the user,
@@ -429,7 +402,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
     });
 
     try {
-      ux.action.start(Logger.Generate("committing changes", { title: "bump" }));
+      ux.action.start(Logger.Generate('committing changes', { title: 'bump' }));
 
       // After the project's version has been bumped, we'll want to commit the
       // changes to the project's version file. For the new release, we'll add
@@ -455,7 +428,7 @@ export abstract class BaseProvider<T extends ProviderSchema["type"]> {
 
       // Finally, if the user has defined any post-bump scripts, we'll execute
       // them now.
-      await this.executeTasks("post", { ...options, oldVersion, newVersion });
+      await this.executeTasks('post', { ...options, oldVersion, newVersion });
     }
   }
 }

@@ -1,16 +1,12 @@
-import { BumpError, ErrorCodes } from "@/structs/BumpError";
-import { Command } from "@/structs/Command";
-import { JsonProvider, TextFileProvider } from "@/structs/providers";
-import { Args, Flags } from "@oclif/core";
+import { BumpError, ErrorCodes } from '@/structs/BumpError';
+import { Command } from '@/structs/Command';
+import { JsonProvider, TextFileProvider } from '@/structs/providers';
+import { Args, Flags } from '@oclif/core';
 
-import type {
-  Object as ConfigSchema,
-  InferProvider,
-  Provider as ProviderSchema,
-} from "@/schemas/config";
-import type { BaseProvider } from "@/structs/providers";
-import type { Arg } from "@oclif/core/lib/interfaces/parser";
-import type { ReadonlyDeep } from "type-fest";
+import type { Object as ConfigSchema, InferProvider, Provider as ProviderSchema } from '@/schemas/config';
+import type { BaseProvider } from '@/structs/providers';
+import type { Arg } from '@oclif/core/lib/interfaces/parser';
+import type { ReadonlyDeep } from 'type-fest';
 
 /**
  * The `phase` command.
@@ -30,8 +26,7 @@ export default class Phase extends Command<typeof Phase> {
    *
    * A small, brief description regarding the command.
    */
-  public static summary =
-    "Test a specific phase of the bump process, without actually bumping the version.";
+  public static summary = 'Test a specific phase of the bump process, without actually bumping the version.';
 
   /**
    * The command's description.
@@ -53,10 +48,7 @@ export default class Phase extends Command<typeof Phase> {
   /**
    * Examples for the command.
    */
-  public static examples = [
-    "<%= config.bin %> <%= command.id %> pre",
-    "<%= config.bin %> <%= command.id %> post",
-  ];
+  public static examples = ['<%= config.bin %> <%= command.id %> pre', '<%= config.bin %> <%= command.id %> post'];
 
   /**
    * Positional arguments for the command.
@@ -71,9 +63,9 @@ export default class Phase extends Command<typeof Phase> {
      */
     phase: Args.string({
       required: true,
-      description: "The phase to test.",
-      options: ["pre", "post"],
-    }) as Arg<"pre" | "post", Record<string, unknown>>,
+      description: 'The phase to test.',
+      options: ['pre', 'post'],
+    }) as Arg<'pre' | 'post', Record<string, unknown>>,
   };
 
   /**
@@ -90,8 +82,8 @@ export default class Phase extends Command<typeof Phase> {
      * execution, if applicable.
      */
     verbose: Flags.boolean({
-      char: "v",
-      description: "Whether to print the output of tasks after execution.",
+      char: 'v',
+      description: 'Whether to print the output of tasks after execution.',
       default: false,
     }),
   };
@@ -105,16 +97,16 @@ export default class Phase extends Command<typeof Phase> {
     const config: ReadonlyDeep<ConfigSchema> = this.importConfig();
 
     // Using the configuration file, we'll determine the provider to use.
-    let provider: BaseProvider<ProviderSchema["type"]>;
+    let provider: BaseProvider<ProviderSchema['type']>;
 
-    if (config.provider.type === "json") {
+    if (config.provider.type === 'json') {
       provider = new JsonProvider({
-        config: config as InferProvider<"json">,
+        config: config as InferProvider<'json'>,
         rootPath: this.rootPath,
       });
     } else {
       provider = new TextFileProvider({
-        config: config as InferProvider<"text">,
+        config: config as InferProvider<'text'>,
         rootPath: this.rootPath,
       });
     }
