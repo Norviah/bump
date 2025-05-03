@@ -1,12 +1,16 @@
-import { BumpError, ErrorCodes } from '@/structs/BumpError';
-import { Command } from '@/structs/Command';
-import { JsonProvider, TextFileProvider } from '@/structs/providers';
-import { Args, Flags } from '@oclif/core';
+import { BumpError, ErrorCodes } from "@/structs/BumpError";
+import { Command } from "@/structs/Command";
+import { JsonProvider, TextFileProvider } from "@/structs/providers";
+import { Args, Flags } from "@oclif/core";
 
-import type { Object as ConfigSchema, InferProvider, Provider as ProviderSchema } from '@/schemas/config';
-import type { BaseProvider } from '@/structs/providers';
-import type { Arg } from '@oclif/core/lib/interfaces/parser';
-import type { ReadonlyDeep } from 'type-fest';
+import type {
+  Object as ConfigSchema,
+  InferProvider,
+  Provider as ProviderSchema,
+} from "@/schemas/config";
+import type { BaseProvider } from "@/structs/providers";
+import type { Arg } from "@oclif/core/lib/interfaces/parser";
+import type { ReadonlyDeep } from "type-fest";
 
 /**
  * The `phase` command.
@@ -26,7 +30,8 @@ export default class Phase extends Command<typeof Phase> {
    *
    * A small, brief description regarding the command.
    */
-  public static summary = 'Test a specific phase of the bump process, without actually bumping the version.';
+  public static summary =
+    "Test a specific phase of the bump process, without actually bumping the version.";
 
   /**
    * The command's description.
@@ -34,19 +39,24 @@ export default class Phase extends Command<typeof Phase> {
    * A more detailed description regarding the command, this should thoroughly
    * describe the command and its purpose.
    */
-  public static description = `When performing the bump process with the \`release\` 
+  public static description = `When performing the bump process with the \`release\`
     command, the process is split into three phases: pre-bump, bump, and post-bump.
     Within the pre-bump and post-bump phases, the tool executes the scripts specified
     in the configuration file, whereas the bump phase is an internal process that
     bumps the version of the project and commits the changes to the repository.
-    
+
     This command allows you to test a specific phase of the bump process, either the
-    pre-bump or post-bump phase without actually bumping the version of your project.`;
+    pre-bump or post-bump phase without actually bumping the version of your project.
+    Additionally, {{oldVersion}} and {{newVersion}} in task commands will instead be
+    replaced by the current version.`;
 
   /**
    * Examples for the command.
    */
-  public static examples = ['<%= config.bin %> <%= command.id %> pre', '<%= config.bin %> <%= command.id %> post'];
+  public static examples = [
+    "<%= config.bin %> <%= command.id %> pre",
+    "<%= config.bin %> <%= command.id %> post",
+  ];
 
   /**
    * Positional arguments for the command.
@@ -59,10 +69,11 @@ export default class Phase extends Command<typeof Phase> {
      *
      * This argument is used to specify which phase of the bump process to test.
      */
-    phase: Args.string({ required: true, description: 'The phase to test.', options: ['pre', 'post'] }) as Arg<
-      'pre' | 'post',
-      Record<string, unknown>
-    >,
+    phase: Args.string({
+      required: true,
+      description: "The phase to test.",
+      options: ["pre", "post"],
+    }) as Arg<"pre" | "post", Record<string, unknown>>,
   };
 
   /**
@@ -78,7 +89,11 @@ export default class Phase extends Command<typeof Phase> {
      * Determines if the command should print the output of tasks after
      * execution, if applicable.
      */
-    verbose: Flags.boolean({ char: 'v', description: 'Whether to print the output of tasks after execution.', default: false }),
+    verbose: Flags.boolean({
+      char: "v",
+      description: "Whether to print the output of tasks after execution.",
+      default: false,
+    }),
   };
 
   /**
@@ -90,12 +105,18 @@ export default class Phase extends Command<typeof Phase> {
     const config: ReadonlyDeep<ConfigSchema> = this.importConfig();
 
     // Using the configuration file, we'll determine the provider to use.
-    let provider: BaseProvider<ProviderSchema['type']>;
+    let provider: BaseProvider<ProviderSchema["type"]>;
 
-    if (config.provider.type === 'json') {
-      provider = new JsonProvider({ config: config as InferProvider<'json'>, rootPath: this.rootPath });
+    if (config.provider.type === "json") {
+      provider = new JsonProvider({
+        config: config as InferProvider<"json">,
+        rootPath: this.rootPath,
+      });
     } else {
-      provider = new TextFileProvider({ config: config as InferProvider<'text'>, rootPath: this.rootPath });
+      provider = new TextFileProvider({
+        config: config as InferProvider<"text">,
+        rootPath: this.rootPath,
+      });
     }
 
     // Before executing the tasks, we'll ensure that the user has defined tasks

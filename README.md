@@ -27,7 +27,7 @@ bumping your project's version number, ensuring that each script is executed
 successfully before the next script.
 
 The main command for this tool is `release`, which will start the bump process
-to release a new version of your project. The bump process is split into three 
+to release a new version of your project. The bump process is split into three
 stages:
 
   1. Pre-bump - before the version number is incremented,
@@ -43,8 +43,10 @@ message, these are available in the configuration file.
 
 For the pre-bump and post-bump stage, you may define any amount of scripts to be
 executed within a desired stage. These scripts are executed in the order
-specifeid and are executed only if the previous script was executed 
-successfully - if a script fails, the bump process will be aborted.
+specified and are executed only if the previous script was executed
+successfully - if a script fails, the bump process will be aborted. Additionally,
+you can include `{{newVersion}}` and `{{oldVersion}}` in a command to reference
+the version before and after bumping.
 
 ### Acknowledgements
 
