@@ -1,4 +1,4 @@
-## [v{{after}}](https://github.com/Norviah/bump/compare/v1.5.0...v{{after}}) (2025-05-03)
+## [v1.5.1](https://github.com/Norviah/bump/compare/v1.5.0...v1.5.1) (2025-05-03)
 
 ### Bug Fixes
 
@@ -8,20 +8,68 @@
 
 - save the new version after the pre phase <code>[ae9176e](https://github.com/Norviah/bump/commit/ae9176efd57ecc0f684d884e14604b1ce6eebf35)</code>
 
-## v1.5.0 (2025-05-03)
+## [v1.5.0](https://github.com/Norviah/bump/compare/v1.4.1...v1.5.0) (2025-05-03)
 
 ### Features
 
 - support `{{oldVersion}}` and `{{newVersion}}` placeholders to reference the version before and after bumping <code>[25044c9](https://github.com/Norviah/bump/commit/25044c9e686761dc48b502ec7c094787143fb976)</code>
 
+## [v1.4.1](https://github.com/Norviah/bump/compare/v1.4.0...v1.4.1) (2023-12-19)
+
+### Bug Fixes
+
+- **commands/hook**: ensure backslashes are properly escaped <code>[9f7f49b](https://github.com/Norviah/bump/commit/9f7f49becc5929bf5e367b4b788c7a061833f668)</code>
+
+## [v1.4.0](https://github.com/Norviah/bump/compare/v1.3.0...v1.4.0) (2023-12-19)
+
+### Refactor
+
+- **config**: set the `timeout` to be nullable <code>[915758f](https://github.com/Norviah/bump/commit/915758f14fe1ad1766b45d71a77ad01221c3f4d6)</code>
+
+### Features
+
 - **commands**: add a command to install a git hook that ensures commits are semantic <code>[a455d98](https://github.com/Norviah/bump/commit/a455d988040c8043ce0502e362fffda8f6177d6b)</code>
 
+## [v1.3.0](https://github.com/Norviah/bump/compare/v1.2.0...v1.3.0) (2023-09-18)
+
+### Features
+
 - implement an option to represent how commits are sorted in the changelog <code>[d7120ef](https://github.com/Norviah/bump/commit/d7120ef1467937515766a3b489eebc9fe68dd305)</code>
+
+## [v1.2.0](https://github.com/Norviah/bump/compare/v1.1.0...v1.2.0) (2023-08-23)
+
+### Features
 
 - implement the `phase` command to execute a specific phase <code>[b5458ce](https://github.com/Norviah/bump/commit/b5458ce385de2106fb212170e6ccfc3ef1010261)</code>
 
 	With this new command, the tool can execute scripts within the specified
 	phase without bumping the project's version.
+
+### Bug Fixes
+
+- **`Changelog`**: trim the result when accessing the repo's url <code>[7345937](https://github.com/Norviah/bump/commit/7345937d4d2b55ad0cac17f3b91ba6b95fcc332c)</code>
+
+## v1.1.0 (2023-08-06)
+
+### Refactor
+
+- **`Changelog`**: remove extra padding when including the body for commits <code>[32f2882](https://github.com/Norviah/bump/commit/32f28824d9ff98bb954fdceba0050c55d101eab1)</code>
+
+- **`command/init`**: refactor the template for the configuration file to a JSON object <code>[d8ef34a](https://github.com/Norviah/bump/commit/d8ef34a751c82196ab47f04ba00a92a01044108c)</code>
+
+- **`Command`**: refactor the logic for initializing a command's context to a method that only imports the config file <code>[2275cbd](https://github.com/Norviah/bump/commit/2275cbd8f2f907c0570d2cd31eaaa930039c9bab)</code>
+
+- ensure the user is in a git repository <code>[8482148](https://github.com/Norviah/bump/commit/848214805f6fcec4193c54ddc1d3e1a3c0fe43eb)</code>
+
+- **`Command`**: trim the error's message when catching and displaying a runtime error <code>[3c39216](https://github.com/Norviah/bump/commit/3c39216e076b86709a69851f6b0c63a86b5ef1ff)</code>
+
+- **`Command`**: move the logic for importing the config file to `InitializeContext` <code>[e504710](https://github.com/Norviah/bump/commit/e5047107aefc500a6145f7dc5b5cbd346af5d765)</code>
+
+- move the validation logic for saving changelogs into the  structure <code>[2638fa6](https://github.com/Norviah/bump/commit/2638fa6946acd2d0477cec6b5d19ae5c0cfb2909)</code>
+
+- implement a class to provide methods for reading from files <code>[dfd5599](https://github.com/Norviah/bump/commit/dfd5599fb4caa605ca26f75d0afe3f20816c38ca)</code>
+
+### Features
 
 - **config**: add a `noSpinner` option to disable the spinner when running commands <code>[ec33292](https://github.com/Norviah/bump/commit/ec33292262a6b022710730fd63ffdac6fdfd0c26)</code>
 
@@ -68,33 +116,9 @@
 
 ### Bug Fixes
 
-- **commands/hook**: ensure backslashes are properly escaped <code>[9f7f49b](https://github.com/Norviah/bump/commit/9f7f49becc5929bf5e367b4b788c7a061833f668)</code>
-
-- **`Changelog`**: trim the result when accessing the repo's url <code>[7345937](https://github.com/Norviah/bump/commit/7345937d4d2b55ad0cac17f3b91ba6b95fcc332c)</code>
-
 - **`Changelog`**: change the split character for `simple-git` as the default one may appear in string results <code>[7440d55](https://github.com/Norviah/bump/commit/7440d558824f727dff65db109eb1e0bdb1f7600d)</code>
 
 - correctly infer the message from a script error <code>[f8cf256](https://github.com/Norviah/bump/commit/f8cf256208375d1bfad11b940cd55f60a823b84b)</code>
-
-### Refactor
-
-- **config**: set the `timeout` to be nullable <code>[915758f](https://github.com/Norviah/bump/commit/915758f14fe1ad1766b45d71a77ad01221c3f4d6)</code>
-
-- **`Changelog`**: remove extra padding when including the body for commits <code>[32f2882](https://github.com/Norviah/bump/commit/32f28824d9ff98bb954fdceba0050c55d101eab1)</code>
-
-- **`command/init`**: refactor the template for the configuration file to a JSON object <code>[d8ef34a](https://github.com/Norviah/bump/commit/d8ef34a751c82196ab47f04ba00a92a01044108c)</code>
-
-- **`Command`**: refactor the logic for initializing a command's context to a method that only imports the config file <code>[2275cbd](https://github.com/Norviah/bump/commit/2275cbd8f2f907c0570d2cd31eaaa930039c9bab)</code>
-
-- ensure the user is in a git repository <code>[8482148](https://github.com/Norviah/bump/commit/848214805f6fcec4193c54ddc1d3e1a3c0fe43eb)</code>
-
-- **`Command`**: trim the error's message when catching and displaying a runtime error <code>[3c39216](https://github.com/Norviah/bump/commit/3c39216e076b86709a69851f6b0c63a86b5ef1ff)</code>
-
-- **`Command`**: move the logic for importing the config file to `InitializeContext` <code>[e504710](https://github.com/Norviah/bump/commit/e5047107aefc500a6145f7dc5b5cbd346af5d765)</code>
-
-- move the validation logic for saving changelogs into the  structure <code>[2638fa6](https://github.com/Norviah/bump/commit/2638fa6946acd2d0477cec6b5d19ae5c0cfb2909)</code>
-
-- implement a class to provide methods for reading from files <code>[dfd5599](https://github.com/Norviah/bump/commit/dfd5599fb4caa605ca26f75d0afe3f20816c38ca)</code>
 
 ### Init
 
